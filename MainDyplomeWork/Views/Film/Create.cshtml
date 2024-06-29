@@ -1,0 +1,89 @@
+﻿@model SmartReservationCinema.Models.FilmModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+
+<hr />
+<div class="logForm container">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <h2>Create Movie</h2>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FilmName" class="control-label"></label>
+                <input asp-for="FilmName" class="form-control" />
+                <span asp-validation-for="FilmName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" cols="50" rows="13" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Time" class="control-label"></label>
+                <input asp-for="Time" class="form-control" />
+                <span asp-validation-for="Time" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Realese" class="control-label"></label>
+                <input asp-for="Realese" class="form-control" />
+                <span asp-validation-for="Realese" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label"></label>
+                <input asp-for="Rating" class="form-control" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" asp-for="uploadFile" />
+                <span asp-validation-for="uploadFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Genres" class="control-label"></label>
+                @foreach(SmartReservationCinema.FilmContext.Genre item in ViewBag.Genres)
+               {
+                if(Model.Genres.Any(gf=>gf.Id_Genre==item?.Id))
+                {
+                <input type="checkbox" name=genres value="@item.Id" checked>@item.GenreName<br />                    
+                }
+                else
+                {
+                <input type="checkbox" name=genres value="@item.Id">@item.GenreName<br />                    
+                }
+
+               }
+            </div>
+            <div class="form-group">
+                <label asp-for="DirectorId" class="control-label"></label>
+                <select asp-for="DirectorId" class ="form-control" asp-items="ViewBag.Directors"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Actors" class="control-label"></label>
+                @foreach(SmartReservationCinema.FilmContext.Actor item in ViewBag.Actors)
+                {
+                    if(Model.Actors.Any(fa => fa.Id_Actor == item?.Id_Actor))
+                    {
+                    <input type="checkbox" name=actors value="@item.Id_Actor" checked>@item.Actor_Name<br/>
+                    }
+                    else
+                    {
+                    <input type="checkbox" name=actors value="@item.Id_Actor">@item.Actor_Name<br/>
+                    }
+                 }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

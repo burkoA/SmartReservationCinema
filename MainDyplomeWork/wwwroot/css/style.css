@@ -1,0 +1,1201 @@
+﻿/*Total body*/
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex; /*Check*/
+    flex-direction: column; /*Check*/
+    min-height: 100vh; /*Check*/
+}
+
+/*Header*/
+
+header {
+    background-color: #232323;
+    color: #fff;
+    padding: 20px 0;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-container {
+    max-width: 1440px; /* Adjust the width as needed */
+    margin: 0 auto;
+    padding: 0 20px;
+    border-radius: 2%;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-left h1 {
+        margin: 0;
+}
+
+.header-middle {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow: auto;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    white-space: nowrap;
+}
+
+nav ul li {
+        display: inline-block;
+        margin-left: 20px;
+        white-space: nowrap;
+}
+
+nav ul li:first-child {
+margin-left: 0;
+}
+
+nav ul li a {
+ color: #fff;
+ text-decoration: none;
+ font-size: 24px;
+ line-height: 50px;
+}
+
+nav ul li a:hover {
+  background-color: rgb(146, 97, 5);
+  color: #ecf0f1;
+  border-radius: 10%;
+}
+
+.admin-panel-block {
+    display: flex;
+    margin-right: 20px;
+}
+
+.admin-panel-block ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 22px;
+    line-height: 50px;
+}
+
+.admin-panel-block ul li a:hover{
+  background-color: rgb(146, 97, 5);
+  color: #ecf0f1;
+  border-radius: 10%;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-form input[type="text"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 400px;
+        margin-right: 10px;
+        box-sizing: border-box;
+        height: 30px;
+}
+
+.search-form button[type="submit"] {
+        background-color: #232323;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: inline;
+        font-size: 22px;
+}
+
+.search-form button[type="submit"]:hover {
+            background-color: #f3a60d;
+}
+
+.text {
+    display: inline-block;
+}
+
+.icon {
+    display: none;
+}
+
+/*Admin Panel*/
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #232323;
+    padding: 10px;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in;
+    border-radius: 10%;
+    border-color: white;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+    margin-top: 0px;
+}
+
+.dropdown-menu li {
+    margin-bottom: 10px;
+    margin: 10px 0;
+}
+
+.dropdown-menu li:first-child {
+    margin-top: 10px; 
+}
+
+.dropdown-menu li {
+    margin-bottom: 10px; 
+}
+
+.dropdown-menu a {
+    color: white;
+    text-decoration: none;
+}
+
+.dropdown-menu-profile {
+    display: none;
+    position: fixed;
+    background-color: #232323;
+    padding: 10px;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in;
+    border-radius: 10%;
+    border-color: white;
+}
+
+.dropdown:hover .dropdown-menu-profile {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/*Main form for login*/
+
+main {
+    flex: 1;
+    padding: 50px 0;
+    background-image: url("/img/cinemaBackground.jpg");
+    background-color: #f5f5f5;
+}
+
+/*.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+}*/
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+label {
+    display: block; /*Check*/
+    margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 20px;
+    box-sizing: border-box; /*Check*/
+}
+
+button {
+    background-color: #232323;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; /*Check*/
+    display: inline;
+}
+
+button[type="submit"] {
+    background-color: #232323;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; /*Check*/
+    display: inline;
+}
+
+button[type="submit"]:hover {
+        background-color: #f3a60d;
+}
+
+button:hover {
+        background-color: #f3a60d;
+}
+
+a {
+    color: #232323;
+    text-decoration: none; /*Check*/
+}
+
+.leftSight {
+    text-align: right;
+    display: inline;
+}
+
+.regst {
+    display: inline;
+}
+
+.regst a {
+        color: #080fdf;
+}
+
+.regst a:hover {
+            color: #f3a60d;
+}
+
+/*Footer*/
+
+footer {
+    background-color: #232323;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: auto;
+}
+
+footer p {
+        margin: 0;
+}
+
+.active {
+    display: inline-block;
+    background-color: #404848;
+    color: #ecf0f1;
+    border-radius: 20%;
+}
+
+/*Index*/
+
+.movie-info {
+    float: left;
+    width: 100%;
+    border: 2px solid #232323;
+    border-radius: 25px;
+}
+
+.movie-info img {
+        max-width: 100%;
+        height: 300px;
+        object-fit: cover;
+}
+
+.movie-info h2 {
+        font-size: 24px;
+        margin-top: 0;
+}
+
+.movie-info p {
+        font-size: 16px;
+}
+
+.rating {
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.rating i {
+    color: #f3a60d;
+}
+
+.movie-description {
+    width: 100%;
+    overflow-wrap: break-word;
+}
+
+.genre {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.genre ul li {
+    list-style-type: none;
+    text-align: left;
+}
+
+.row {
+    background-color: white;
+    border-radius: 2%;
+    margin-bottom: 40px;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.row img {
+        width: 100%; /* Adjust the width as needed */
+        height: 300px; /* Adjust the height as needed */
+        object-fit: cover;
+}
+
+.logForm {
+    background-color: white;
+    border-radius: 2%;
+    margin-bottom: 50px;
+    margin-top: 120px;
+    padding: 100px 0;
+}
+
+.logForm form {
+        margin-top: 100px;
+        margin-bottom: 100px;
+}
+
+.genre-info {
+    display: flex;
+    align-items: center;
+}
+
+.genre-info h2, .genre-info p {
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+}
+
+.actionButton {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.actionButton a {
+    margin-right: 5px;
+    background-color: orange;
+    border-radius: 5px;
+}
+
+.newFilm a {
+    color: white;
+}
+
+.cinema-list {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cinema-list h2 {
+   font-size: 24px;
+   margin: 0;
+   padding: 0;
+}
+
+.newFilm {
+    text-align: right;
+}
+
+/*Pages change*/
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-wrapper {
+    display: inline-block;
+}
+
+.pagination {
+    display: inline-flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.page-item {
+    margin-right: 5px;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #232323;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.page-link:hover {
+        background-color: #f3a60d;
+}
+
+.pagesText {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #232323;
+    color: #fff;
+    margin-right: 5px;
+    border-radius: 10%;
+}
+
+/*Details page*/
+
+.detailsMovie {
+    background-color: white;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.movie-details {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 26px;
+    border-style: outset;
+    border-radius: 20px;
+}
+
+.film-intro {
+    display: flex;
+    align-items: flex-start;
+}
+
+.film-image {
+    width: 490px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.film-info h1 {
+    font-size: 60px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.film-info p {
+    margin: 0;
+}
+
+.film-description {
+    margin-bottom: 20px;
+    border-radius: 20px;
+    border-right: outset;
+    border-bottom: outset;
+}
+
+.film-description p {
+    padding-left: 10px;
+}
+
+.available-cinema-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cinema-avaible-action {
+
+}
+
+.form-filter-action {
+    display: flex;
+}
+
+.form-filter-action form {
+    margin-left: 10px;
+}
+
+.cinema-available-list {
+    margin-left: 10px;
+}
+
+.cinema-available-list img {
+    width: 200px;
+    height: 200px;
+}
+
+.townFormFilter{
+    display: flex;
+    max-height: 50px;
+}
+
+.townFormFilter label{
+    flex-basis: 120%;
+    white-space: nowrap;
+}
+
+.townFormFilter select,button{
+    flex-direction: row;
+    flex-shrink: 1;
+}
+
+.user-comment {
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 12px groove gray;
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
+}
+
+.user-comment h1 {
+    flex-basis: 100%;
+    width: 100%;
+}
+
+.comment-form {
+    font-size: 20px;
+    margin: 0;
+}
+
+.comment-form textarea {
+    border-radius: 10px;
+}
+
+.comment-list {
+    border-top-style: outset;
+    border-top-width: 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-top-color: gray;
+    border-bottom-style: outset;
+    border-bottom-width: 5px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+    margin-left: 0px;
+}
+
+.rate:not(:checked) > input {
+        position: absolute;
+        top: -9999px;
+}
+
+.rate:not(:checked) > label {
+        float: right;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 30px;
+        color: #ccc;
+}
+
+.rate:not(:checked) > label:before {
+     content: '★';
+     background: no-repeat;
+}
+
+    .rate > input:checked ~ label {
+        color: #ffc700;
+    }
+
+    .rate:not(:checked) > label:hover,
+    .rate:not(:checked) > label:hover ~ label {
+        color: #deb217;
+    }
+
+    .rate > input:checked + label:hover,
+    .rate > input:checked + label:hover ~ label,
+    .rate > input:checked ~ label:hover,
+    .rate > input:checked ~ label:hover ~ label,
+    .rate > label:hover ~ input:checked ~ label {
+        color: #c59b08;
+    }
+
+.markedPlaceInline {
+    display: inline-block;
+}
+/*Cinema details*/
+.cinema-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.cinema-details {
+    display: flex;
+    width: 100%;
+    font-size: 26px;
+    border-style: outset;
+    border-radius: 20px;
+}
+
+.session-title h1 {
+    white-space: nowrap;
+}
+
+.cinema-image {
+    width: 500px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 30px;
+    margin-right: 20px;
+    border: 3px solid black;
+}
+
+.cinema-info h1 {
+    font-size: 56px;
+}
+
+.cinema-info p {
+    font-size: 36px;
+}
+
+.cinema-info h1,
+.cinema-info p {
+    margin: 0;
+}
+
+.cinema-description {
+    margin-bottom: 20px;
+}
+
+.cinema-description h2 {
+        font-size: 46px;
+}
+
+.cinema-description p {
+        font-size: 26px;
+}
+
+.cinema-timetable {
+    border-top-style: outset;
+    border-top-width: 10px;
+    border-top-right-radius: 2%;
+    border-top-left-radius: 2%;
+    margin-top: 5px;
+    border-bottom-style: outset;
+    border-bottom-width: 10px;
+    border-bottom-right-radius: 5%;
+    border-bottom-left-radius: 5%;
+    overflow-x: auto;
+}
+
+/*User Profile*/
+
+.user-profile {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+}
+
+.purchase-history {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    padding-right: 50px;
+    border: 2px solid #232323;
+    height: 350px;
+    margin-top: 120px;
+}
+
+.purchase-history a {
+        font-weight: bold;
+        text-decoration: none;
+        color: #232323;
+        margin-top: 35px;
+}
+
+.purchase-history a:hover {
+            color: #f3a60d;
+}
+
+.user-details {
+    padding: 10px 0;
+    padding-left: 20px;
+    width: calc(100% - 200px); /* Відняли ширину блоку purchase-history */
+}
+
+.user-details form h1 {
+        font-size: 28px;
+}
+
+.user-details form table {
+        width: 100%;
+        border-collapse: collapse;
+}
+
+.user-details form table th, table td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px; /* Збільшуємо розмір тексту */
+}
+
+.user-details form table th {
+            text-align: left;
+            font-weight: bold;
+}
+
+/*Session*/
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    width: 100%; /* Змінено ширину на 100% */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+        background-color: #474747;
+        color: #ffffff;
+        text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+        padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid;
+}
+
+.img-session {
+    width: 200px;
+    height: 150px;
+}
+
+.sessionLine {
+    display: flex;
+}
+
+.sessionLine form {
+        margin-left: 60%;
+}
+
+.session-title {
+    flex-wrap: nowrap;
+}
+
+.create-session {
+    justify-content: flex-start;
+}
+
+.session-action {
+    list-style: none;
+}
+
+.filter-form button {
+    margin-top: 5px;
+}
+
+/*Screen Size*/
+/*Big screen*/
+@media screen and (min-width: 1025px) and (max-width: 1200px) {
+    .icon {
+        display: inline-block;
+    }
+    .text{
+        display: none;
+    }
+    .genre ul{
+        font-size: 19.5px;
+        margin-right: 20px;
+        padding-left: 5px;
+    }
+    .form-filter-action label{
+        font-size: 18px;
+    }
+    .townFormFilter label{
+        font-size: 18px;
+    }
+    .all-comment button{
+        margin-bottom: 10px;
+    }
+    .cinema-timetable{
+        overflow-x: auto;
+    }
+    .session-title h1 {
+        white-space: nowrap;
+    }
+    .sessionLine {
+        overflow-x:hidden;
+    }
+    .cinema-image{
+        width: 500px;
+    }
+}
+/*Small screen and laptop*/
+@media screen and (min-width: 769px) and (max-width: 1024px){
+    .icon {
+        display: inline-block;
+    }
+    .text {
+        display: none;
+    }
+    .header-middle nav ul li a{
+        font-size: 15px;
+    }
+    .dropdown-toggle {
+        font-size: 15px;
+    }
+    .search-form button[type="submit"] {
+        font-size: 15px;
+        width: 60px;
+    }
+    .search-form input[type="text"]{
+        width: 90px;
+    }
+    /*Film Index*/
+    .genre {
+        width: 20%;
+    }
+    .genre ul {
+        font-size: 19.5px;
+        margin-right: 20px;
+        padding-left: 5px;
+    }
+    /*Film details*/
+    .film-info{
+        margin-left: 5px;
+    }
+    .rate button[type="submit"] {
+        width: 73px;
+        font-size: 15px;
+    }
+    .form-filter-action label {
+        font-size: 18px;
+    }
+    .townFormFilter label {
+        font-size: 18px;
+    }
+    .all-comment button {
+        margin-bottom: 10px;
+    }
+    /*Cinema Details*/
+    .cinema-timetable {
+        overflow-x: auto;
+    }
+    .session-title h1 {
+        white-space: nowrap;
+    }
+    .cinema-image {
+        max-width: 100%;
+    }
+    /*Admin Panel*/
+    .table-fix{
+        overflow-x: auto;
+    }
+    .field-fix{
+        white-space: nowrap;
+    }
+}
+/*Tablet screen*/
+@media screen and (min-width: 481px) and (max-width: 768px){
+    /*Nav bar*/
+    .icon {
+        display: inline-block;
+        font-size: 15px;
+    }
+    .text {
+        display: none;
+    }
+    .header-left{
+        width:15%;
+    }
+    .header-left h1{
+        font-size:20px;
+    }
+    .header-middle{
+        width:20%;
+    }
+    .header-middle nav ul li a {
+        font-size: 10px;
+    }
+    .admin-panel-block{
+        width:20%;
+        text-align:left;
+        display:flex;
+        justify-content: flex-end;
+    }
+    .admin-panel-block ul li a{
+        font-size: 10px;
+    }
+    .header-right{
+        width:20%;
+    }
+    .search-form {
+        width:20%;
+    }
+    .search-form input[type="text"] {
+        width: 70px;
+    }
+    .search-form button[type="submit"] {
+        display:none;
+    }
+    /*Film Index*/
+    .genre {
+        width: 20%;
+    }
+    .genre ul {
+        font-size: 19.5px;
+        margin-right: 20px;
+        padding-left: 5px;
+    }
+    .row {
+        padding: 20px 20px;
+    }
+    /*Film Details*/
+    .film-info {
+        font-size: 20px;
+    }
+    .markedPlaceInline iframe {
+        width: 100%;
+    }
+    .rate button[type="submit"] {
+        height: 30px;
+        width: 60px;
+        font-size: 10px;
+    }
+    .film-description p{
+        word-wrap: break-word;
+    }
+    .form-filter-action label {
+        font-size: 15px;
+    }
+    .townFormFilter label {
+        font-size: 15px;
+    }
+    .townFormFilter input[type="date"]{
+        width:120px;
+    }
+    .townFormFilter button[type="submit"]{
+        font-size:10px;
+        width:70px;
+    }
+    .all-comment button {
+        margin-bottom: 10px;
+    }
+    /*Cinema Details*/
+    .cinema-image{
+        max-width: 50%;
+    }
+    .cinema-timetable {
+        overflow-x: auto;
+    }
+    .session-title h1 {
+        white-space: nowrap;
+    }
+    .delete-session-fix{
+        word-wrap: break-word;
+    }
+    .cinema-image {
+        max-width: 100%;
+    }
+    /*Table fix*/
+    .table-fix {
+        overflow-x: auto;
+    }
+    .field-fix {
+        white-space: nowrap;
+    }
+}
+@media screen and (min-width: 320px) and (max-width: 480px){
+    /*Nav bar*/
+    .header-left{
+        display:none;
+    }
+    .header-middle{
+        width:40%;
+    }
+    nav ul li a{
+        font-size:10px;
+    }
+    .icon{
+        display:inline-block;
+    }
+    .text{
+        display:none;
+    }
+    .admin-panel-block{
+        width:10%;
+        display:flex;
+        justify-content:flex-end;
+    }
+    .admin-panel-block ul li{
+        margin-top:15px;
+    }
+    .admin-panel-block ul li a{
+        font-size:10px;
+    }
+    .header-right{
+        width:20%;
+    }
+    .search-form input[type="text"]{
+        width:60px;
+        font-size:10px;
+        height:10px;
+        margin-top:15px;
+    }
+    .search-form button[type="submit"]{
+        display: none;
+    }
+    /*Film Index*/
+    .row{
+        border-radius: 4%;
+    }
+    .movie-info{
+        margin-left:2px;
+    }
+    /*Film Details*/
+    .movie-details{
+        display: block;
+    }
+    .markedPlaceInline iframe{
+        width:100%;
+    }
+    .film-image{
+        width: 320px;
+    }
+    .film-description p {
+        word-break: break-word;
+    }
+    .cinema-avaible-action{
+        flex-wrap: wrap;
+        padding-bottom:50px;
+    }
+    .cinema-avaible-action h1{
+        width:100%;
+    }
+    .form-filter-action{
+        flex-wrap:wrap;
+    }
+    .form-filter-action label{
+        font-size:10px;
+    }
+    .form-filter-action form {
+        margin-left: 0px;
+    }
+    .form-control {
+        height:30px;
+        width:80px;
+        font-size: 10px;
+    }
+    .townFormFilter label{
+        font-size: 10px;
+        margin: 0px 0px 0px;
+    }
+    .townFormFilter input[type="date"]{
+        height:30px;
+        width:50px;
+    }
+    .townFormFilter button[type="submit"] {
+        height:30px;
+        font-size: 10px;
+        width:70px;
+    }
+    .comment-form textarea{
+        width:200px;
+    }
+    .all-comment form button[type="submit"]{
+        margin-bottom:10px;
+    }
+    /*Cinema Details*/
+
+    .cinema-details{
+        flex-wrap: wrap;
+    }
+    .session-title h1{
+        white-space: nowrap;
+    }
+    .cinema-image {
+        max-width: 100%;
+    }
+
+    /*Table Fix*/
+    .table-fix {
+        overflow-x: auto;
+    }
+    .field-fix {
+        white-space: nowrap;
+    }
+    /*User*/
+    .purchase-history {
+        padding: 0px;
+        padding-right: 0px;
+        height: 250px;
+    }
+    .user-profile{
+        display:block;
+    }
+    .user-details {
+        overflow-x: unset;
+        width: 100%;
+    }
+    .user-details form table tbody tr td input[type="text"]{
+        width:120px;
+    }
+    .user-details form table tbody tr td input[type="number"] {
+        width: 120px;
+    }
+    .user-details form table th {
+        border-bottom: unset;
+    }
+}

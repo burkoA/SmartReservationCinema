@@ -1,0 +1,23 @@
+﻿@model SmartReservationCinema.Models.LoginModel
+@{
+}
+		<div class="logForm container">
+			<form asp-action="Login" method="post">
+			<h2>Login</h2>
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<label asp-for="Email"></label>
+				<input type="email" asp-for="Email">
+				<span asp-validation-for="Email" class="text-danger"></span>
+
+				<label asp-for="Password"></label>
+				<input type="password" asp-for="Password">
+				<span asp-validation-for="Password" class="text-danger"></span>
+				</br>
+				<div class="regst">
+					<button type="submit">Login</button>
+				  <p class="leftSight">Don't have an account? <a asp-action="Registration">Register now</a></p></br>
+				  <p class="leftSight">Forgot your password? <a asp-action="PasswordRestore">Restore now</a></p>
+				</div>
+
+			</form>
+		</div>

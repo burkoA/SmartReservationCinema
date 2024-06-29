@@ -1,0 +1,106 @@
+﻿@model SmartReservationCinema.FilmContext.Film
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+	<div class="detailsMovie main-container">
+			<div class="movie-details">
+                <div>
+            <img src="/img/filmsImage/@Model.Image" alt="@Model.FilmName" class="film-image" style="border-width: 3px;border-color: black;border-style: solid;">
+                </div>
+				<div class="film-info">
+					<h1>@Model.FilmName</h1>
+					<p><strong>Director:</strong> @Model.Director.Name_Director</p>
+					<p><strong>Actors:</strong>
+                        @foreach(SmartReservationCinema.FilmContext.Film_Actor film_actor in Model.Actors) {
+                          <span>@film_actor.actor.Actor_Name, </span>  
+                        }
+                    </p>
+					<p class="markedPlaceInline"><strong>Average Rating:</strong> @ViewBag.Rate
+                    @if(Context.User.Identity.IsAuthenticated)
+                    {
+                            <iframe src="/FilmMarks/Create?filmId=@Model.Id" width="100%" height="65" style="border:none;"></iframe>
+                    }
+                    </p>
+					<p><strong>Duration:</strong> @Model.Time min</p>
+					<p><strong>Subtitles:</strong> 
+                        @foreach(SmartReservationCinema.FilmContext.Subtitle film_subtitle in Model.Subtitles)
+                        {
+                            <span>@film_subtitle.Language.LanguageName, </span>
+                        }    
+                    </p>
+					<p><strong>Genres:</strong> 
+                        @foreach(SmartReservationCinema.FilmContext.Genre_Film genre_film in Model.Genres) {
+                          <span>@genre_film.genre.GenreName, </span>  
+                        }
+                    </p>
+					<p><strong>Release:</strong> @Model.Realese.ToShortDateString()</p>
+				</div>
+			</div>
+
+			<div class="film-description">
+				<h1>Description</h1>
+				<p>@Model.Description</p>
+			</div>
+
+			<div class="available-cinema-list">
+                <div class="cinema-avaible-action">
+				  <h1>Cinemas</h1>
+                <div class="form-filter-action" style="flex-wrap: nowrap;">
+                    <label style="font-size: 20px;">Choose town</label><br />
+                    <form class="townFormFilter">
+                        <select style="height: 35px; width:150px;" name="TownIdFilter" class="form-control">
+                        @foreach(SmartReservationCinema.FilmContext.Town town in ViewBag.Towns)
+                        {
+                            if (town.Id == ViewBag.SelectedTownId)
+                            {
+                                <option value="@town.Id" selected>@town.TownName</option>
+                            }
+                            else
+                            {
+                                <option value="@town.Id">@town.TownName</option>
+                            }
+                        }
+                        </select>
+
+                        <label style="font-size: 20px; margin: 0px 10px 0px;">Pick date</label><br />
+                        <input style="height: 30px" type="date" name="dateFilter" value="@ViewBag.dateFilter.ToString("yyyy-MM-dd")">
+                        <button style="height: 35px; margin-left: 10px;" type="submit">Submit</button>
+                    </form>
+                </div>
+                </div>
+                <p style="width: 100%;">Choose town and date. Cinema will be displayed from the nearest to the farthest (from left to right)</p>
+
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <div class="error-message" style="color: red; font-weight: bold;">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+
+                @foreach(SmartReservationCinema.Models.CinemaDistanceModel cinema in ViewBag.Cinemas)
+                {
+                    <div class="cinema-available-list">    
+                        <a asp-controller="Cinema" asp-action="Details" asp-route-id="@cinema.Id"><h4>@cinema.CinemaName</h4>
+                        <img src="/img/cinemaImage/@cinema.Image">
+                        </a><br />
+                        @cinema.Distance
+                    </div>
+                }
+			</div>
+
+            <div class="user-comment">
+                @if (ViewBag.UserName != null){
+                    @await Html.PartialAsync("CreateComment", (SmartReservationCinema.Models.CommentModel)@ViewBag.CommentModel);
+                }                
+            </div><br />
+
+            <div class="comment-list">
+                <h1>All comment </h1> <br />
+                <section>
+                    @await Html.PartialAsync("AllComments", @Model.Comments)
+                </section>
+            </div>
+
+		</div>

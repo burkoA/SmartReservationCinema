@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Cinema</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <script type="text/javascript" src="/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-left">
+      <h1>Cinema</h1>
+    </div>
+    <div class="header-middle">
+      <nav>
+        <ul>
+          <li><a asp-controller="Film" asp-action="Index">Movies</a></li>
+          <li><a asp-controller="Cinema" asp-action="Index">Cinema</a></li>
+        @if (Context.User.Identity.IsAuthenticated)
+        {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">
+                                    <span class="icon">👤</span>
+                                    <span class="text">User profile</span>
+                        </a>
+                        <ul class="dropdown-menu-profile">
+                            <li><a asp-controller="Account" asp-action="Profile">Profile</a></li>
+                            <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+                        </ul>
+                    </li>
+        }
+        else{
+        <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+        }
+        </ul>
+      </nav>
+    </div>
+    @if (Context.User.IsInRole("admin") || Context.User.IsInRole("manager"))
+        {
+            <div class="admin-panel-block">
+                <ul>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Admin Panel</a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Genres" asp-action="Index">Genres</a></li>
+                            <li><a asp-controller="Town" asp-action="Index">Towns</a></li>
+                            <li><a asp-controller="Directors" asp-action="Index">Directors</a></li>
+                            <li><a asp-controller="Actor" asp-action="Index">Actor</a></li>
+                            <li><a asp-controller="Hall" asp-action="Index">Hall</a></li>
+                            <li><a asp-controller="Language" asp-action="Index">Language</a></li>
+                            <li><a asp-controller="Subtitle" asp-action="Index">Subtitle</a></li>
+                            @if (Context.User.IsInRole("admin"))
+                                {
+                                  <li><a asp-controller="Account" asp-action="AccountList">Users</a></li>  
+                                }
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        }
+    <div class="header-right">
+      <form class="search-form" method="get">
+        <input type="text" name="search" placeholder="Search...">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</header>
+  <main role="main" class="pb-3">
+    @RenderBody()
+  </main>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - SmartReservationCinema - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script>
+$document.addEventListener('DOMContentLoaded', function() {
+  var dropdownToggle = document.querySelectorAll('.dropdown-toggle');
+  var dropdownMenus = document.querySelectorAll('.dropdown-menu');
+
+  dropdownToggle.forEach(function(toggle) {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      var menu = this.nextElementSibling;
+      toggle.classList.toggle('active');
+      menu.classList.toggle('show');
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.matches('.dropdown-toggle') && !e.target.matches('.dropdown-toggle *')) {
+      dropdownMenus.forEach(function(menu) {
+        menu.classList.remove('show');
+        menu.previousElementSibling.classList.remove('active');
+      });
+    }
+  });
+});
+    </script>
+@*<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var dropdown = document.querySelector(".dropdown");
+        var menu = dropdown.querySelector(".dropdown-menu-profile");
+
+        dropdown.addEventListener("mouseenter", function () {
+            menu.style.opacity = "1";
+            menu.style.pointerEvents = "none";
+        });
+
+        dropdown.addEventListener("mouseleave", function () {
+            menu.style.opacity = "0";
+            menu.style.pointerEvents = "none";
+        });
+    });
+</script>*@
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

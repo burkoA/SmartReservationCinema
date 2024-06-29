@@ -1,0 +1,40 @@
+﻿@model IEnumerable<SmartReservationCinema.FilmContext.TicketPrice>
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+<form asp-action="EditPrices">
+<input type="hidden" name="sessionId" value="@ViewBag.SessionId" />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HallSector)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@{
+    int lineNum = 0;
+}
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HallSector.SectorName)
+            </td>
+            <td>
+                <input type="hidden" name="prices[@lineNum].Id" value="@item.Id" />
+                <input type="hidden" name="prices[@lineNum].SectorId" value="@item.SectorId" />
+                <input type="hidden" name="prices[@lineNum].SessionId" value="@ViewBag.SessionId" />
+                <input type="number" name="prices[@lineNum].Price" value="@item.Price" />
+            </td>
+        </tr>
+        lineNum++;
+}
+    </tbody>
+</table>
+<button type="submit">Save</button>
+</form>
