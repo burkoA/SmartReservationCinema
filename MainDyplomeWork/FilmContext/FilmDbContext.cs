@@ -30,7 +30,7 @@ namespace SmartReservationCinema.FilmContext
         public DbSet<FavouriteFilm> FavouriteFilms { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
-            dbContextOptionsBuilder.UseSqlServer("Server=STUD-128-win\\SQLEXPRESS;Initial Catalog=FilmsDB;Integrated Security=True;TrustServerCertificate=True");
+            dbContextOptionsBuilder.UseSqlServer("Data Source=MSI\\SQLEXPRESS;Initial Catalog=FilmsDB;Integrated Security=True;Trust Server Certificate=True");
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

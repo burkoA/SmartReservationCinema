@@ -10,33 +10,33 @@
     <hr />
     <dl>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name_Director)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name_Director)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Birth_Place)
+            @Html.DisplayNameFor(model => model.BirthPlace)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Birth_Place)
+            @Html.DisplayFor(model => model.BirthPlace)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Work_Experience)
+            @Html.DisplayNameFor(model => model.WorkExperience)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Work_Experience)
+            @Html.DisplayFor(model => model.WorkExperience)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie_Number)
+            @Html.DisplayNameFor(model => model.MovieNumber)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Movie_Number)
+            @Html.DisplayFor(model => model.MovieNumber)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id_Director" />
+        <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

@@ -12,9 +12,9 @@ namespace SmartReservationCinema.FilmContext
         [MaxLength(100)]
         public string Text { get; set; }
         [Required]
-        public int IdFilm { get; set; }
+        public int FilmId { get; set; }
         [Required]
-        public int IdUser { get; set; }
+        public int UserId { get; set; }
         [ForeignKey("IdFilm")]
         public Film Film { get; set; }
         [ForeignKey("IdUser")]

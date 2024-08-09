@@ -11,10 +11,10 @@
                 </div>
 				<div class="film-info">
 					<h1>@Model.FilmName</h1>
-					<p><strong>Director:</strong> @Model.Director.Name_Director</p>
+					<p><strong>Director:</strong> @Model.Director.Name</p>
 					<p><strong>Actors:</strong>
                         @foreach(SmartReservationCinema.FilmContext.Film_Actor film_actor in Model.Actors) {
-                          <span>@film_actor.actor.Actor_Name, </span>  
+                          <span>@film_actor.Actor.Name, </span>  
                         }
                     </p>
 					<p class="markedPlaceInline"><strong>Average Rating:</strong> @ViewBag.Rate
@@ -32,7 +32,7 @@
                     </p>
 					<p><strong>Genres:</strong> 
                         @foreach(SmartReservationCinema.FilmContext.Genre_Film genre_film in Model.Genres) {
-                          <span>@genre_film.genre.GenreName, </span>  
+                          <span>@genre_film.Genre.GenreName, </span>  
                         }
                     </p>
 					<p><strong>Release:</strong> @Model.Realese.ToShortDateString()</p>

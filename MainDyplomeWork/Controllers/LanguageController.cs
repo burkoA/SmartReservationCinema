@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartReservationCinema.FilmContext;
@@ -16,7 +16,8 @@ namespace SmartReservationCinema.Controllers
             _context = context;
         }
 
-        // GET: LanguageController
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Index(string search)
         {
             var language = from a in _context.Languages.OrderBy(l => l.LanguageName) select a;
@@ -29,7 +30,8 @@ namespace SmartReservationCinema.Controllers
             return View(await language.ToListAsync());
         }
 
-        // GET: LanguageController/Details/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,6 +41,7 @@ namespace SmartReservationCinema.Controllers
 
             var language = await _context.Languages
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (language == null)
             {
                 return NotFound();
@@ -47,15 +50,16 @@ namespace SmartReservationCinema.Controllers
             return View(language);
         }
 
-        // GET: LanguageController/Create
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: LanguageController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Create(Language language)
         {
             if (ModelState.IsValid)
@@ -64,10 +68,12 @@ namespace SmartReservationCinema.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(language);
         }
 
-        // GET: LanguageController/Edit/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,16 +82,18 @@ namespace SmartReservationCinema.Controllers
             }
 
             var language = await _context.Languages.FindAsync(id);
+
             if (language == null)
             {
                 return NotFound();
             }
+
             return View(language);
         }
 
-        // POST: LanguageController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Edit(int id, Language language)
         {
             if (id != language.Id)
@@ -106,17 +114,16 @@ namespace SmartReservationCinema.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(language);
         }
 
-        // GET: LanguageController/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,6 +133,7 @@ namespace SmartReservationCinema.Controllers
 
             var language = await _context.Languages
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (language == null)
             {
                 return NotFound();
@@ -134,14 +142,16 @@ namespace SmartReservationCinema.Controllers
             return View(language);
         }
 
-        // POST: LanguageController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var language = await _context.Languages.FindAsync(id);
+
             _context.Languages.Remove(language);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

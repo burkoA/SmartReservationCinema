@@ -12,6 +12,6 @@ namespace SmartReservationCinema.FilmContext
         [Display(Name = "Genre Name")]
         public string GenreName { get; set; }
 
-        public List<Genre_Film> films { get; set; }
+        public List<Genre_Film> Films { get; set; }
     }
 }

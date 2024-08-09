@@ -15,15 +15,15 @@ namespace SmartReservationCinema.FilmContext
         [Display(Name = "Cinema Name")]
         public int CinemaId { get; set; }
         [ForeignKey("CinemaId")]
-        public Cinema cinema { get; set; }
+        public Cinema Cinema { get; set; }
         [Display(Name = "Hall Name")]
         public int? HallId { get; set; }
         [ForeignKey("HallId")]
-        public Hall? hall { get; set; }
+        public Hall? Hall { get; set; }
         [Display(Name = "Film Name")]
         public int FilmId { get; set; }
         [ForeignKey("FilmId")]
-        public Film film { get; set; }
+        public Film Film { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }

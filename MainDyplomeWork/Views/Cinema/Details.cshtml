@@ -46,9 +46,9 @@
             @foreach(SmartReservationCinema.FilmContext.Session item in ViewBag.Sessions) {
             <tr>
               <td>@item.StartTime.ToShortTimeString()</td>
-              <td>@item.film.Time min</td>
-              <td><img src="/img/filmsImage/@item.film.Image" class="img-session"></td>
-              <td>@item.film.FilmName</td>
+              <td>@item.Film.Time min</td>
+              <td><img src="/img/filmsImage/@item.Film.Image" class="img-session"></td>
+              <td>@item.Film.FilmName</td>
               <td>@item.Language.LanguageName</td>
               <td>
                 @if (item.TicketPrices.Count()>0)
@@ -74,10 +74,10 @@
                 }
                 <form asp-antiforgery="true" asp-controller="Calendar" asp-action="EventWarning">
                     <input type="hidden" name="CinemaName" value="@Model.CinemaName" />
-                    <input type="hidden" name="FilmName" value="@item.film.FilmName" />
+                    <input type="hidden" name="FilmName" value="@item.Film.FilmName" />
                     <input type="hidden" name="StartDate" value="@ViewBag.filterDate.ToString("yyyy-MM-dd")" />
                     <input type="hidden" name="StartTime" value="@item.StartTime.ToShortTimeString()" />
-                    <input type="hidden" name="DurationFilm" value="@item.film.Time">
+                    <input type="hidden" name="DurationFilm" value="@item.Film.Time">
                     <button>Create Event</button>
                 </form>
               </td>

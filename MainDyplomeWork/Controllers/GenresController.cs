@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,14 +13,14 @@ namespace SmartReservationCinema.Controllers
     public class GenresController : Controller
     {
         private readonly FilmDbContext _context;
-        private string[] wordsToSearch = null;
 
         public GenresController(FilmDbContext context)
         {
             _context = context;
         }
 
-        // GET: Genres
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Index([FromQuery] string search = "")
         {
             IEnumerable<Genre> items = _context.Genres;
@@ -46,7 +47,8 @@ namespace SmartReservationCinema.Controllers
             return search.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         }
 
-        // GET: Genres/Details/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -56,6 +58,7 @@ namespace SmartReservationCinema.Controllers
 
             var genre = await _context.Genres
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (genre == null)
             {
                 return NotFound();
@@ -64,15 +67,16 @@ namespace SmartReservationCinema.Controllers
             return View(genre);
         }
 
-        // GET: Genres/Create
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Genres/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Create([Bind("Id,GenreName")] Genre genre)
         {
             if (ModelState.IsValid)
@@ -81,10 +85,12 @@ namespace SmartReservationCinema.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(genre);
         }
 
-        // GET: Genres/Edit/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,18 +99,19 @@ namespace SmartReservationCinema.Controllers
             }
 
             var genre = await _context.Genres.FindAsync(id);
+
             if (genre == null)
             {
                 return NotFound();
             }
+
             return View(genre);
         }
 
-        // POST: Genres/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,GenreName")] Genre genre)
         {
             if (id != genre.Id)
@@ -125,17 +132,17 @@ namespace SmartReservationCinema.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(genre);
         }
 
-        // GET: Genres/Delete/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,6 +152,7 @@ namespace SmartReservationCinema.Controllers
 
             var genre = await _context.Genres
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (genre == null)
             {
                 return NotFound();
@@ -153,14 +161,16 @@ namespace SmartReservationCinema.Controllers
             return View(genre);
         }
 
-        // POST: Genres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var genre = await _context.Genres.FindAsync(id);
+
             _context.Genres.Remove(genre);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

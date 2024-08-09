@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +18,14 @@ namespace SmartReservationCinema.Controllers
         {
             _context = context;
         }
-        // GET: HallController
+
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Index(string search)
         {
-            var halls = from h in _context.Halls.OrderBy(h => h.HallName).Include(h => h.Cinema)
+            var halls = from h in _context.Halls
+                                            .OrderBy(h => h.HallName)
+                                            .Include(h => h.Cinema)
                         select h;
 
             if (!String.IsNullOrEmpty(search))
@@ -31,7 +36,8 @@ namespace SmartReservationCinema.Controllers
             return View(await halls.ToListAsync());
         }
 
-        // GET: HallController/Details/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,17 +45,22 @@ namespace SmartReservationCinema.Controllers
                 return NotFound();
             }
 
-            var hall = await _context.Halls.Include(c => c.Cinema).Include(h=>h.HallSectors)
+            var hall = await _context.Halls
+                .Include(c => c.Cinema)
+                .Include(h => h.HallSectors)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (hall == null)
             {
                 return NotFound();
             }
+
             GenerateList();
             return View(hall);
         }
 
-        // GET: HallController/Create
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public ActionResult Create()
         {
             GenerateList();
@@ -61,9 +72,9 @@ namespace SmartReservationCinema.Controllers
             ViewBag.Cinema = new SelectList(_context.Cinemas.OrderBy(c => c.CinemaName), "Id", "CinemaName");
         }
 
-        // POST: HallController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Create(Hall hall)
         {
             if (ModelState.IsValid)
@@ -72,11 +83,13 @@ namespace SmartReservationCinema.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             GenerateList();
             return View(hall);
         }
 
-        // GET: HallController/Edit/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,16 +100,18 @@ namespace SmartReservationCinema.Controllers
             var hall = await _context.Halls.FindAsync(id);
             GenerateList();
             Hall halls = _context.Halls.Include(h => h.Cinema).Where(c => c.Id == id).FirstOrDefault();
+
             if (halls == null)
             {
                 return NotFound();
             }
+
             return View(halls);
         }
 
-        // POST: HallController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Edit(int id, Hall hall)
         {
             if (id != hall.Id)
@@ -117,18 +132,18 @@ namespace SmartReservationCinema.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             GenerateList();
             return View(hall);
         }
 
-        // GET: HallController/Delete/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,8 +151,10 @@ namespace SmartReservationCinema.Controllers
                 return NotFound();
             }
 
-            var hall = await _context.Halls.Include(c => c.Cinema)
+            var hall = await _context.Halls
+                .Include(c => c.Cinema)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (hall == null)
             {
                 return NotFound();
@@ -146,10 +163,10 @@ namespace SmartReservationCinema.Controllers
             return View(hall);
         }
 
-        // POST: HallController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete([FromForm] int id, IFormCollection collection)
+        [Authorize(Roles = "admin,manager")]
+        public ActionResult DeleteConfirmed([FromForm] int id)
         {
             try
             {
@@ -176,16 +193,17 @@ namespace SmartReservationCinema.Controllers
             }
         }
 
-        // GET: HallController/Create
-        public ActionResult CreateSector(int id)
-        {            
-            return View(new HallSector() { HallId=id});
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
+        public ActionResult CreateSector(int hallId)
+        {
+            return View(new HallSector() { HallId = hallId });
         }
 
-        // POST: HallController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateSector([FromForm]HallSector hallSector)
+        [Authorize(Roles = "admin,manager")]
+        public async Task<IActionResult> CreateSector([FromForm] HallSector hallSector)
         {
             if (ModelState.IsValid)
             {
@@ -193,10 +211,12 @@ namespace SmartReservationCinema.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = hallSector.HallId });
             }
-          
+
             return View(hallSector);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> EditSector(int? id)
         {
             if (id == null)
@@ -204,18 +224,19 @@ namespace SmartReservationCinema.Controllers
                 return NotFound();
             }
 
-            var hallSector = await _context.HallSectors.FindAsync(id);            
-            
+            var hallSector = await _context.HallSectors.FindAsync(id);
+
             if (hallSector == null)
             {
                 return NotFound();
             }
+
             return View(hallSector);
         }
 
-        // POST: HallController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> EditSector(int id, HallSector hallSector)
         {
             if (id != hallSector.Id)
@@ -236,18 +257,17 @@ namespace SmartReservationCinema.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Details), new {id=hallSector.HallId});
+
+                return RedirectToAction(nameof(Details), new { id = hallSector.HallId });
             }
-           
+
             return View(hallSector);
         }
 
-        // GET: HallController/Delete/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> DeleteSector(int? id)
         {
             if (id == null)
@@ -257,6 +277,7 @@ namespace SmartReservationCinema.Controllers
 
             var hallSector = await _context.HallSectors.Include(c => c.Hall)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (hallSector == null)
             {
                 return NotFound();
@@ -265,9 +286,9 @@ namespace SmartReservationCinema.Controllers
             return View(hallSector);
         }
 
-        // POST: HallController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public ActionResult DeleteSector([FromForm] int id, IFormCollection collection)
         {
             try

@@ -17,25 +17,20 @@ namespace SmartReservationCinema.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly FilmDbContext _db;
+        private readonly FilmDbContext _context;
         private readonly MailSender _mailSender;
-        private string[] wordsToSearch = null;
 
         public AccountController(FilmDbContext context, MailSender mailSender)
         {
-            _db = context;
+            _context = context;
             _mailSender = mailSender;
-        }
-        public IActionResult Index()
-        {
-            return View();
         }
 
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
+
+        [HttpGet]
+        public IActionResult Login() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -43,50 +38,49 @@ namespace SmartReservationCinema.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!CheckLoginTry(model.Email))
+                if (!CheckLoginAttempts(model.Email))
                 {
                     ModelState.AddModelError("", "Too many try. Try again after 15 min");
                     AddLoginErrorToLog(model.Email);
                     return View(model);
                 }
-                User user = _db.Users.FirstOrDefault((User user) => user.Email == model.Email);
-                if (user != null)
+
+                User user = _context.Users.FirstOrDefault((User user) => user.Email == model.Email);
+
+                if (user != null && user.Password == FilmContext.User.GetPasswordHash(model.Password))
                 {
-                    if (user.Password == FilmContext.User.GetPasswordHash(model.Password))
-                    {
-                        InternalLogin(user, HttpContext);
-                        return Redirect("~/Film/Index");
-                    }
+                    InternalLogin(user, HttpContext);
+                    return Redirect("~/Film/Index");
                 }
+
                 ModelState.AddModelError("", "Wrong password or email");
                 AddLoginErrorToLog(model.Email);
             }
             return View(model);
         }
 
-        private void AddLoginErrorToLog(string Email)
+        private void AddLoginErrorToLog(string email)
         {
-            FailedLogin failedLogin = new FailedLogin();
-            failedLogin.Email = Email;
-            failedLogin.IPAddress = HttpContext.Connection.RemoteIpAddress.ToString();
-            failedLogin.Time = DateTime.Now;
-            _db.Add(failedLogin);
-            _db.SaveChanges();
+            var failedLogin = new FailedLogin
+            {
+                Email = email,
+                IPAddress = HttpContext.Connection.RemoteIpAddress.ToString(),
+                Time = DateTime.Now
+            };
+
+            _context.Add(failedLogin);
+            _context.SaveChanges();
         }
 
-        private bool CheckLoginTry(string Email)
+        private bool CheckLoginAttempts(string email)
         {
-            int cnt = _db.FailedLogins.Where(f => f.Email == Email && f.Time > DateTime.Now.AddMinutes(-15)).Count();
-            if(cnt > 5)
-            {
-                return false;
-            }
-            cnt = _db.FailedLogins.Where(f => f.IPAddress == HttpContext.Connection.RemoteIpAddress.ToString() && f.Time > DateTime.Now.AddMinutes(-15)).Count();
-            if (cnt > 5)
-            {
-                return false;
-            }
-            return true;
+            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+            var fifteenMinutesAgo = DateTime.Now.AddMinutes(-15);
+
+            int recentAttempts = _context.FailedLogins.Count(f =>
+                (f.Email == email || f.IPAddress == ipAddress) && f.Time > fifteenMinutesAgo);
+
+            return recentAttempts <= 5;
         }
 
         async public static void InternalLogin(User user, HttpContext httpContext)
@@ -104,28 +98,28 @@ namespace SmartReservationCinema.Controllers
         }
 
         [HttpGet]
-        public IActionResult Registration()
-        {
-            return View();
-        }
+        public IActionResult Registration() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registration(RegistrationModel model)
         {
             if (ModelState.IsValid)
+            {
                 try
                 {
                     User user = new User(model);
-                    _db.Users.Add(user);
-                    _db.SaveChanges();
-                    InternalLogin(user,HttpContext);
+                    _context.Users.Add(user);
+                    _context.SaveChanges();
+
+                    InternalLogin(user, HttpContext);
                     return Redirect("~/Film/Index");
                 }
-                catch (System.Exception ex)
+                catch (Exception)
                 {
-                    ModelState.AddModelError("", "Valid for save");
+                    ModelState.AddModelError(string.Empty, "Unable to register the user.");
                 }
+            }
             return View(model);
         }
 
@@ -138,11 +132,13 @@ namespace SmartReservationCinema.Controllers
         [HttpGet]
         public IActionResult Profile()
         {
-            User user = GetCurrentUser(_db, HttpContext);
-            if(user == null)
+            User user = GetCurrentUser(_context, HttpContext);
+
+            if (user == null)
             {
-                return View("Error", new ErrorViewModel() { RequestId = "Something went wrong!"});
+                return View("Error", new ErrorViewModel() { RequestId = "Something went wrong!" });
             }
+
             ProfileModel profile = new ProfileModel(user);
             return View(profile);
         }
@@ -150,14 +146,17 @@ namespace SmartReservationCinema.Controllers
         [HttpPost]
         public IActionResult Profile(ProfileModel profile)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                User user1 = GetCurrentUser(_db, HttpContext);
-                user1.Update(profile);
-                _db.Update(user1);
-                _db.SaveChanges();
+                User user = GetCurrentUser(_context, HttpContext);
+                user.Update(profile);
+
+                _context.Update(user);
+                _context.SaveChanges();
+
                 return RedirectToAction("Index", "Film");
             }
+
             return View(profile);
         }
 
@@ -167,10 +166,7 @@ namespace SmartReservationCinema.Controllers
         }
 
         [HttpGet]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
+        public IActionResult ChangePassword() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -178,63 +174,60 @@ namespace SmartReservationCinema.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = GetCurrentUser(_db, HttpContext);
-                string oldPasswordHashed = SmartReservationCinema.FilmContext.User.GetPasswordHash(changePassword.OldPassword);
-                if( oldPasswordHashed != user.Password)
+                User user = GetCurrentUser(_context, HttpContext);
+                string oldPasswordHashed = FilmContext.User.GetPasswordHash(changePassword.OldPassword);
+
+                if (oldPasswordHashed != user.Password)
                 {
                     ModelState.AddModelError("OldPassword", "Old password is wrong!");
                     return View(changePassword);
                 }
-                user.Password = SmartReservationCinema.FilmContext.User.GetPasswordHash(changePassword.NewPassword);
-                _db.Users.Update(user);
-                _db.SaveChanges();
+
+                user.Password = FilmContext.User.GetPasswordHash(changePassword.NewPassword);
+                _context.Users.Update(user);
+                _context.SaveChanges();
+
                 return RedirectToAction("PasswordAlreadyChanged");
             }
+
             return View(changePassword);
         }
 
-        public IActionResult Denied()
-        {
-            return View();
-        }
+        [HttpGet]
+        public IActionResult Denied() => View();
 
-        public async Task<IActionResult> PasswordRestore()
-        {
-            //_mailSender.SendMessage("arsenburko67@gmail.com", "Mail Test", "Hello Freund");
-            return View("RestorePassword");
-        }
+        [HttpGet]
+        public IActionResult PasswordRestore() => View("RestorePassword");
 
         [HttpPost]
         public async Task<IActionResult> PasswordRestore(PasswordRestore passwordRestore)
         {
             if (ModelState.IsValid)
             {
-                User user = _db.Users.Where(u => u.Email == passwordRestore.Email).FirstOrDefault();
+                User user = _context.Users.Where(u => u.Email == passwordRestore.Email).FirstOrDefault();
+
                 if (user == null)
                 {
                     ModelState.AddModelError("Email", "This email doesn't exist");
                     return View(passwordRestore);
                 }
-                Random random = new Random();
-                int codeGenerate = random.Next(100000, 999999);
-                //user.RestoreCode = codeGenerate;
-                //_db.Update(user);
-                HttpContext.Session.SetInt32("RestoreCode", codeGenerate);
+
+                var code = new Random().Next(100000, 999999);
+                HttpContext.Session.SetInt32("RestoreCode", code);
                 HttpContext.Session.SetString("CodeTime", DateTime.Now.AddMinutes(15).Ticks.ToString());
                 HttpContext.Session.SetString("Email", user.Email);
                 HttpContext.Session.SetInt32("CodeIsRight", 0);
+
                 _mailSender.SendMessage(user.Email, "Restore Code Smart Reservation",
-                    "Your generate code " + codeGenerate);
+                    "Your generate code " + code);
                 return RedirectToAction("CheckRestoreCode");
             }
+
             return View("RestorePassword");
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckRestoreCode()
-        {
-            return View();
-        }
+        public IActionResult CheckRestoreCode() => View();
 
         [HttpPost]
         public async Task<IActionResult> CheckRestoreCode(PasswordRestore passwordRestore)
@@ -243,80 +236,75 @@ namespace SmartReservationCinema.Controllers
             {
                 ModelState.AddModelError("RestoreCode", "Restore code cannot be empty!");
                 return View(passwordRestore);
-                HttpContext.Session.SetInt32("CodeIsRight", 0);
             }
-            int code;
-            int rightCode = HttpContext.Session.GetInt32("RestoreCode").Value;
-            long CodeTime = long.Parse(HttpContext.Session.GetString("CodeTime"));
-            if (rightCode == 0 || DateTime.Now.Ticks > CodeTime)
+
+            if (!int.TryParse(passwordRestore.RestoreCode, out var code))
             {
-                ModelState.AddModelError("RestoreCode", "Something went wrong!");
-                HttpContext.Session.SetInt32("CodeIsRight", 0);
+                ModelState.AddModelError("RestoreCode", "Invalid restore code.");
                 return View(passwordRestore);
             }
 
-            if (!Int32.TryParse(passwordRestore.RestoreCode, out code))
-            {
-                ModelState.AddModelError("RestoreCode", "Restore code not value!");
-                HttpContext.Session.SetInt32("CodeIsRight", 0);
-                return View(passwordRestore);
+            var correctCode = HttpContext.Session.GetInt32("RestoreCode") ?? 0;
+            var codeExpirationTime = long.Parse(HttpContext.Session.GetString("CodeTime") ?? "0");
 
-            }
-            if (code != rightCode)
+            if (correctCode == 0 || DateTime.Now.Ticks > codeExpirationTime)
             {
-                ModelState.AddModelError("RestoreCode", "Restore code is not correct!");
-                HttpContext.Session.SetInt32("CodeIsRight", 0);
+                ModelState.AddModelError("RestoreCode", "Restore code has expired.");
                 return View(passwordRestore);
             }
+
+            if (code != correctCode)
+            {
+                ModelState.AddModelError("RestoreCode", "Incorrect restore code.");
+                return View(passwordRestore);
+            }
+
             HttpContext.Session.SetInt32("CodeIsRight", 1);
             return RedirectToAction("EnterNewPassword");
 
         }
 
         [HttpGet]
-        public async Task<IActionResult> EnterNewPassword()
-        {
-            return View();
-        }
+        public IActionResult EnterNewPassword() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EnterNewPassword(EnterNewPassword newPassword)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(newPassword);
-            }
+            if (!ModelState.IsValid) return View(newPassword);
+
             String userEmail = HttpContext.Session.GetString("Email");
             int codeIsRight = HttpContext.Session.GetInt32("CodeIsRight") ?? 0;
+
             if (userEmail == null || codeIsRight != 1)
             {
                 ModelState.AddModelError("", "Error work!");
                 return View(newPassword);
             }
-            User user = _db.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
+            User user = _context.Users.Where(u => u.Email == userEmail).FirstOrDefault();
+
             if (user == null)
             {
                 ModelState.AddModelError("", "Something went wrong!");
                 return View(newPassword);
             }
-            user.Password = SmartReservationCinema.FilmContext.User.GetPasswordHash(newPassword.Password);
-            _db.Users.Update(user);
-            _db.SaveChanges();
+
+            user.Password = FilmContext.User.GetPasswordHash(newPassword.Password);
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
             return RedirectToAction("PasswordAlreadyChanged");
         }
 
         [HttpGet]
-        public async Task<IActionResult> PasswordAlreadyChanged()
-        {
-            return View();
-        }
+        public IActionResult PasswordAlreadyChanged() => View();
 
         [HttpGet]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> AccountList([FromQuery] String search = "")
         {
-            var accounts = from a in _db.Users
+            var accounts = from a in _context.Users
                            select a;
 
             if (!String.IsNullOrEmpty(search))
@@ -336,11 +324,13 @@ namespace SmartReservationCinema.Controllers
                 return NotFound();
             }
 
-            var user = await _db.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
+
             if (user == null)
             {
                 return NotFound();
             }
+
             user.SetRoleSelections();
             return View(user);
         }
@@ -353,34 +343,29 @@ namespace SmartReservationCinema.Controllers
                 return NotFound();
             }
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
                     user.Role = Request.Form["Role"];
-
-                    _db.Update(user);
-                    await _db.SaveChangesAsync();
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }   
+                    if (!UserExists(user.Id)) return NotFound();
+                    throw;
                 }
+
                 return RedirectToAction(nameof(AccountList));
             }
+
             return View(user);
         }
 
         private bool UserExists(int id)
         {
-            return _db.Users.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Id == id);
         }
 
         [HttpGet]
@@ -392,8 +377,8 @@ namespace SmartReservationCinema.Controllers
                 return NotFound();
             }
 
-            var user = await _db.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(m => m.Id == id);
+
             if (user == null)
             {
                 return NotFound();
@@ -406,38 +391,44 @@ namespace SmartReservationCinema.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            var user = await _db.Users.FindAsync(id);
-            _db.Users.Remove(user);
-            await _db.SaveChangesAsync();
+            var user = await _context.Users.FindAsync(id);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(AccountList));
         }
 
         [Authorize]
         public async Task<IActionResult> FavouriteFilmList()
-        {            
-            ViewBag.CurrentUser = AccountController.GetCurrentUser(_db, HttpContext);
+        {
+            ViewBag.CurrentUser = AccountController.GetCurrentUser(_context, HttpContext);
             int userId = ViewBag.CurrentUser.Id;
-            IEnumerable<FavouriteFilm> items;
-            items = _db.FavouriteFilms.Include(ff => ff.Film).Where(ff => ff.UserId == userId);
+
+            IEnumerable<FavouriteFilm> items = _context.FavouriteFilms.Include(ff => ff.Film).Where(ff => ff.UserId == userId);
 
             return View(items);
         }
 
         public async Task<IActionResult> DeleteFavoriteFilm(int id)
         {
-            User CurrentUser = AccountController.GetCurrentUser(_db, HttpContext);
+            User CurrentUser = AccountController.GetCurrentUser(_context, HttpContext);
+
             if (CurrentUser == null) { return Denied(); }
+
             try
             {
-                FavouriteFilm favFilm=await _db.FavouriteFilms.FirstOrDefaultAsync(ff=>ff.UserId == CurrentUser.Id && ff.Id==id);
-                if(favFilm == null) { return NotFound(); }
-                _db.FavouriteFilms.Remove(favFilm);
-                _db.SaveChanges();
+                FavouriteFilm favFilm = await _context.FavouriteFilms.FirstOrDefaultAsync(ff => ff.UserId == CurrentUser.Id && ff.Id == id);
+
+                if (favFilm == null) { return NotFound(); }
+
+                _context.FavouriteFilms.Remove(favFilm);
+                _context.SaveChanges();
             }
             catch
             {
                 return NotFound();
             }
+
             return RedirectToAction("FavouriteFilmList");
         }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartReservationCinema.FilmContext;
@@ -13,17 +14,18 @@ namespace SmartReservationCinema.Controllers
     {
 
         private readonly FilmDbContext _context;
-        private string[] wordsToSearch = null;
 
         public TownController(FilmDbContext context)
         {
             _context = context;
         }
 
-        // GET: TownController
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Index([FromQuery] String search = "")
         {
             IEnumerable<Town> items = _context.Towns;
+
             if (!string.IsNullOrEmpty(search))
             {
                 var wordsToSearch = SplitSearch(search);
@@ -37,6 +39,7 @@ namespace SmartReservationCinema.Controllers
                     return false;
                 });
             }
+
             return View(items.OrderBy(t => t.TownName).ToList());
         }
 
@@ -45,7 +48,8 @@ namespace SmartReservationCinema.Controllers
             return search.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         }
 
-        // GET: TownController/Details/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -55,6 +59,7 @@ namespace SmartReservationCinema.Controllers
 
             var town = await _context.Towns
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (town == null)
             {
                 return NotFound();
@@ -63,15 +68,16 @@ namespace SmartReservationCinema.Controllers
             return View(town);
         }
 
-        // GET: TownController/Create
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: TownController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Create(Town town)
         {
             if (ModelState.IsValid)
@@ -80,10 +86,12 @@ namespace SmartReservationCinema.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(town);
         }
 
-        // GET: TownController/Edit/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,17 +100,19 @@ namespace SmartReservationCinema.Controllers
             }
 
             var town = await _context.Towns.FindAsync(id);
+
             if (town == null)
             {
                 return NotFound();
             }
+
             return View(town);
         }
 
-        // POST: TownController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,Town town)
+        [Authorize(Roles = "admin,manager")]
+        public async Task<IActionResult> Edit(int id, Town town)
         {
             if (id != town.Id)
             {
@@ -122,17 +132,17 @@ namespace SmartReservationCinema.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(town);
         }
 
-        // GET: TownController/Delete/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,6 +152,7 @@ namespace SmartReservationCinema.Controllers
 
             var town = await _context.Towns
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (town == null)
             {
                 return NotFound();
@@ -150,14 +161,16 @@ namespace SmartReservationCinema.Controllers
             return View(town);
         }
 
-        // POST: TownController/Delete/5
-        [HttpPost,ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var town = await _context.Towns.FindAsync(id);
+
             _context.Towns.Remove(town);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

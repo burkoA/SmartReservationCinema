@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,66 +14,86 @@ namespace SmartReservationCinema.Controllers
     public class CinemaController : Controller
     {
         private readonly FilmDbContext _db;
-        private readonly int itemsOnPage = 5;
         private readonly IWebHostEnvironment _env;
-        private string[] wordsToSearch = null;
+        private readonly int _itemsPerPage = 5;
+
         public CinemaController(FilmDbContext context, IWebHostEnvironment env)
         {
             _db = context;
             _env = env;
         }
 
-        // GET: CinemaController
-        public ActionResult Index(int? id, int curPage=0,[FromQuery] String search="")
+        [HttpGet]
+        public ActionResult Index(int? id, int curPage = 0, [FromQuery] String search = "")
         {
             ViewBag.TownsList = _db.Towns.OrderBy(t => t.TownName).ToList();
-            IEnumerable<Cinema> items;
+            var cinemas = GetCinemas(id, search);
 
-            if (id.HasValue && id.Value > 0)
-            {
-                IEnumerable<Town> tmp = _db.Towns.Where(tc => tc.Id == id.Value);
+            int totalItems = cinemas.Count();
+            cinemas = PaginateCinemas(cinemas, curPage);
 
-                items = _db.Cinemas.Include(c => c.Town)
-                    .Where(c => c.Town.Equals(tmp.FirstOrDefault(tc => c.TownId == tc.Id)));
+            ViewBag.PageCount = (int)Math.Ceiling(totalItems / (double)_itemsPerPage);
+            ViewBag.CurrentTownId = id ?? 0;
 
-
-            }
-            else items = _db.Cinemas.Include(C => C.Town).ThenInclude((Town tc) => tc.Cinemas).ToList();
-            if (!string.IsNullOrEmpty(search))
-            {
-                var wordsToSearch = SplitSearch(search);
-                items = items.Where(c => wordsToSearch.Any(word => c.CinemaName.ToLower().Contains(word.ToLower())));
-            }
-            int itemCnt = items.Count();
-
-            items = items.Skip(itemsOnPage * curPage).Take(itemsOnPage);
-
-            int pageCnt = (int)Math.Ceiling(itemCnt / (double)itemsOnPage);
-            ViewBag.pageCnt = pageCnt;
-            ViewBag.curGenge = id ?? 0;
-            return View(items);
+            return View(cinemas);
         }
 
-        private IEnumerable<string> SplitSearch(string search)
+        private IEnumerable<Cinema> GetCinemas(int? townId, string search)
+        {
+            var cinemas = _db.Cinemas.Include(c => c.Town).AsQueryable();
+
+            if (townId.HasValue && townId.Value > 0)
+            {
+                cinemas = cinemas.Where(c => c.TownId == townId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchWords = SplitSearchWords(search);
+                cinemas = cinemas.Where(c => searchWords.Any(word => c.CinemaName.Contains(word, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            return cinemas;
+        }
+
+        private IEnumerable<Cinema> PaginateCinemas(IEnumerable<Cinema> cinemas, int currentPage)
+        {
+            return cinemas.Skip(_itemsPerPage * currentPage).Take(_itemsPerPage).ToList();
+        }
+
+        private IEnumerable<string> SplitSearchWords(string search)
         {
             return search.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         }
 
-        // GET: CinemaController/Details/5
-        public ActionResult Details(int id, DateTime? filterDate=null)
+
+        [HttpGet]
+        public ActionResult Details(int id, DateTime? filterDate = null)
         {
-            if(filterDate == null)
+            if (filterDate == null)
             {
                 filterDate = DateTime.Today;
             }
+
             ViewBag.filterDate = filterDate;
             Cinema cinema = _db.Cinemas.Include(t => t.Town).FirstOrDefault(c => c.Id == id);
-            ViewBag.Sessions = _db.Sessions.Where(s => s.CinemaId == id && s.StartDate<=filterDate && s.EndDate>=filterDate)
-                .Include(s => s.film).Include(s => s.Language).Include(s => s.hall).Include(s=>s.TicketPrices).ToArray();
+            ViewBag.Sessions = GetCinemaSessions(id, filterDate.Value);
+
             return View(cinema);
         }
 
-        // GET: CinemaController/Create
+        private IEnumerable<Session> GetCinemaSessions(int cinemaId, DateTime filterDate)
+        {
+            return _db.Sessions
+                .Where(s => s.CinemaId == cinemaId && s.StartDate <= filterDate && s.EndDate >= filterDate)
+                .Include(s => s.Film)
+                .Include(s => s.Language)
+                .Include(s => s.Hall)
+                .Include(s => s.TicketPrices)
+                .ToArray();
+        }
+
+        [HttpGet]
         [Authorize(Roles = "admin,manager")]
         public ActionResult Create()
         {
@@ -87,7 +106,6 @@ namespace SmartReservationCinema.Controllers
             ViewBag.Towns = new SelectList(_db.Towns.OrderBy(t => t.TownName), "Id", "TownName");
         }
 
-        // POST: CinemaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin,manager")]
@@ -95,7 +113,12 @@ namespace SmartReservationCinema.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) { throw new Exception(""); }
+                if (!ModelState.IsValid)
+                {
+                    GenerateList();
+                    return View(cinema);
+                }
+
                 if (cinema.NewImage != "")
                 {
                     cinema.Image = cinema.NewImage;
@@ -104,8 +127,10 @@ namespace SmartReservationCinema.Controllers
                 {
                     cinema.Image = "DefaultImage.jpg";
                 }
+
                 _db.Cinemas.Add(cinema);
                 _db.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -115,7 +140,7 @@ namespace SmartReservationCinema.Controllers
             }
         }
 
-        // GET: CinemaController/Edit/5
+        [HttpGet]
         [Authorize(Roles = "admin,manager")]
         public ActionResult Edit(int id)
         {
@@ -124,38 +149,40 @@ namespace SmartReservationCinema.Controllers
             return View(new CinemaModel(cinema));
         }
 
-        // POST: CinemaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin,manager")]
         public ActionResult Edit(int id, CinemaModel cinema)
         {
-            try
-            {
-                if (!ModelState.IsValid) { throw new Exception(""); }
-
-                if (cinema.NewImage != "")
-                {
-                    string imgFolder = _env.WebRootPath + "/img/cinemaImage/";
-                    if (!String.IsNullOrEmpty(cinema.Image))
-                    {
-                        System.IO.File.Delete(imgFolder + cinema.Image);
-                    }
-                    cinema.Image = cinema.NewImage;
-                }
-
-                _db.Cinemas.Update(cinema);
-                _db.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            if (!ModelState.IsValid)
             {
                 GenerateList();
                 return View(cinema);
             }
+
+            UpdateCinemaImage(cinema);
+            _db.Cinemas.Update(cinema);
+            _db.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: CinemaController/Delete/5
+        private void UpdateCinemaImage(CinemaModel cinema)
+        {
+            if (!string.IsNullOrEmpty(cinema.NewImage))
+            {
+                var imgFolder = System.IO.Path.Combine(_env.WebRootPath, "img", "cinemaImage");
+
+                if (!string.IsNullOrEmpty(cinema.Image))
+                {
+                    System.IO.File.Delete(System.IO.Path.Combine(imgFolder, cinema.Image));
+                }
+
+                cinema.Image = cinema.NewImage;
+            }
+        }
+
+        [HttpGet]
         [Authorize(Roles = "admin,manager")]
         public ActionResult Delete(int id)
         {
@@ -163,11 +190,10 @@ namespace SmartReservationCinema.Controllers
             return View(cinema);
         }
 
-        // POST: CinemaController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin,manager")]
-        public ActionResult Delete([FromForm]int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed([FromForm] int id)
         {
             try
             {

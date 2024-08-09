@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartReservationCinema.FilmContext;
 
 namespace SmartReservationCinema.Migrations
 {
     [DbContext(typeof(FilmDbContext))]
-    partial class FilmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240809145751_actorChange")]
+    partial class actorChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,22 +85,16 @@ namespace SmartReservationCinema.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("FilmId")
+                    b.Property<int>("IdFilm")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdFilm")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdUser")
+                    b.Property<int>("IdUser")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -111,26 +107,26 @@ namespace SmartReservationCinema.Migrations
 
             modelBuilder.Entity("SmartReservationCinema.FilmContext.Director", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Id_Director")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("BirthPlace")
+                    b.Property<string>("Birth_Place")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MovieNumber")
+                    b.Property<int>("Movie_Number")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Name_Director")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("WorkExperience")
+                    b.Property<int>("Work_Experience")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id_Director");
 
                     b.ToTable("Director");
                 });
@@ -253,22 +249,22 @@ namespace SmartReservationCinema.Migrations
 
             modelBuilder.Entity("SmartReservationCinema.FilmContext.Film_Actor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Id_Film_Actor")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ActorId")
+                    b.Property<int>("Id_Actor")
                         .HasColumnType("int");
 
-                    b.Property<int>("FilmId")
+                    b.Property<int>("Id_Film")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id_Film_Actor");
 
-                    b.HasIndex("ActorId");
+                    b.HasIndex("Id_Actor");
 
-                    b.HasIndex("FilmId");
+                    b.HasIndex("Id_Film");
 
                     b.ToTable("FilmActor");
                 });
@@ -378,22 +374,22 @@ namespace SmartReservationCinema.Migrations
 
             modelBuilder.Entity("SmartReservationCinema.FilmContext.Genre_Film", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Id_Genre_Film")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("FilmId")
+                    b.Property<int>("Id_Film")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenreId")
+                    b.Property<int>("Id_Genre")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id_Genre_Film");
 
-                    b.HasIndex("FilmId");
+                    b.HasIndex("Id_Film");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex("Id_Genre");
 
                     b.ToTable("GenresFilmes");
                 });
@@ -727,11 +723,15 @@ namespace SmartReservationCinema.Migrations
                 {
                     b.HasOne("SmartReservationCinema.FilmContext.Film", "Film")
                         .WithMany("Comments")
-                        .HasForeignKey("IdFilm");
+                        .HasForeignKey("IdFilm")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SmartReservationCinema.FilmContext.User", "User")
                         .WithMany()
-                        .HasForeignKey("IdUser");
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Film");
 
@@ -789,40 +789,40 @@ namespace SmartReservationCinema.Migrations
 
             modelBuilder.Entity("SmartReservationCinema.FilmContext.Film_Actor", b =>
                 {
-                    b.HasOne("SmartReservationCinema.FilmContext.Actor", "Actor")
+                    b.HasOne("SmartReservationCinema.FilmContext.Actor", "actor")
                         .WithMany("Films")
-                        .HasForeignKey("ActorId")
+                        .HasForeignKey("Id_Actor")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SmartReservationCinema.FilmContext.Film", "Film")
+                    b.HasOne("SmartReservationCinema.FilmContext.Film", "film")
                         .WithMany("Actors")
-                        .HasForeignKey("FilmId")
+                        .HasForeignKey("Id_Film")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Actor");
+                    b.Navigation("actor");
 
-                    b.Navigation("Film");
+                    b.Navigation("film");
                 });
 
             modelBuilder.Entity("SmartReservationCinema.FilmContext.Genre_Film", b =>
                 {
-                    b.HasOne("SmartReservationCinema.FilmContext.Film", "Film")
+                    b.HasOne("SmartReservationCinema.FilmContext.Film", "film")
                         .WithMany("Genres")
-                        .HasForeignKey("FilmId")
+                        .HasForeignKey("Id_Film")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SmartReservationCinema.FilmContext.Genre", "Genre")
-                        .WithMany("Films")
-                        .HasForeignKey("GenreId")
+                    b.HasOne("SmartReservationCinema.FilmContext.Genre", "genre")
+                        .WithMany("films")
+                        .HasForeignKey("Id_Genre")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Film");
+                    b.Navigation("film");
 
-                    b.Navigation("Genre");
+                    b.Navigation("genre");
                 });
 
             modelBuilder.Entity("SmartReservationCinema.FilmContext.Hall", b =>
@@ -950,7 +950,7 @@ namespace SmartReservationCinema.Migrations
 
             modelBuilder.Entity("SmartReservationCinema.FilmContext.Genre", b =>
                 {
-                    b.Navigation("Films");
+                    b.Navigation("films");
                 });
 
             modelBuilder.Entity("SmartReservationCinema.FilmContext.Hall", b =>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartReservationCinema.FilmContext;
@@ -16,20 +16,23 @@ namespace SmartReservationCinema.Controllers
         {
             _context = context;
         }
-        // GET: ActorController
+
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Index(string search)
         {
-            var actors = from a in _context.Actors.OrderBy(a => a.Actor_Name) select a;
+            var actors = from a in _context.Actors.OrderBy(a => a.Name) select a;
 
             if (!String.IsNullOrEmpty(search))
             {
-                actors = actors.Where(a => a.Actor_Name.Contains(search));
+                actors = actors.Where(a => a.Name.Contains(search));
             }
 
             return View(await actors.ToListAsync());
         }
 
-        // GET: ActorController/Details/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,8 +40,8 @@ namespace SmartReservationCinema.Controllers
                 return NotFound();
             }
 
-            var actor = await _context.Actors
-                .FirstOrDefaultAsync(m => m.Id_Actor == id);
+            var actor = await _context.Actors.FirstOrDefaultAsync(m => m.Id == id);
+
             if (actor == null)
             {
                 return NotFound();
@@ -47,15 +50,13 @@ namespace SmartReservationCinema.Controllers
             return View(actor);
         }
 
-        // GET: ActorController/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
+        public IActionResult Create() => View();
 
-        // POST: ActorController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Create(Actor actor)
         {
             if (ModelState.IsValid)
@@ -64,10 +65,12 @@ namespace SmartReservationCinema.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(actor);
         }
 
-        // GET: ActorController/Edit/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,19 +79,21 @@ namespace SmartReservationCinema.Controllers
             }
 
             var actor = await _context.Actors.FindAsync(id);
+
             if (actor == null)
             {
                 return NotFound();
             }
+
             return View(actor);
         }
 
-        // POST: ActorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Edit(int id, Actor actor)
         {
-            if (id != actor.Id_Actor)
+            if (id != actor.Id)
             {
                 return NotFound();
             }
@@ -102,7 +107,7 @@ namespace SmartReservationCinema.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ActorExists(actor.Id_Actor))
+                    if (!ActorExists(actor.Id))
                     {
                         return NotFound();
                     }
@@ -111,12 +116,15 @@ namespace SmartReservationCinema.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(actor);
         }
 
-        // GET: ActorController/Delete/5
+        [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,8 +132,8 @@ namespace SmartReservationCinema.Controllers
                 return NotFound();
             }
 
-            var actor = await _context.Actors
-                .FirstOrDefaultAsync(m => m.Id_Actor == id);
+            var actor = await _context.Actors.FirstOrDefaultAsync(m => m.Id == id);
+
             if (actor == null)
             {
                 return NotFound();
@@ -134,20 +142,22 @@ namespace SmartReservationCinema.Controllers
             return View(actor);
         }
 
-        // POST: ActorController/Delete/5
-        [HttpPost,ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var actor = await _context.Actors.FindAsync(id);
+
             _context.Actors.Remove(actor);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool ActorExists(int id)
         {
-            return _context.Actors.Any(e => e.Id_Actor == id);
+            return _context.Actors.Any(e => e.Id == id);
         }
     }
 }
