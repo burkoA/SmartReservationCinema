@@ -18,16 +18,16 @@ namespace SmartReservationCinema.Services
             MailAddress from = new MailAddress(fromEmail, fromName);
             MailAddress to = new MailAddress(toEmail);
             MailMessage m = new MailMessage(from, to);
+
             m.Subject = msgTheme;
             m.Body = text;
             m.IsBodyHtml = false;
+
             SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);//465
             smtp.Credentials = new NetworkCredential(fromEmail, yourPassword);
             smtp.EnableSsl = true;
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtp.Send(m);
-            
-
         }
     }
 }

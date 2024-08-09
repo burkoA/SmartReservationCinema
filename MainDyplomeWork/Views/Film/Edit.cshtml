@@ -48,18 +48,17 @@
                 <span asp-validation-for="GenreId" class="text-danger"></span>
             </div>*@
             <div class="form-group">
-                <label asp-for="Genres" class="control-label"></label>
-                @foreach(SmartReservationCinema.FilmContext.Genre item in ViewBag.Genres)
+               <label asp-for="Genres" class="control-label"></label>
+               @foreach(SmartReservationCinema.FilmContext.Genre item in ViewBag.Genres)
                {
-                if(Model.Genres.Any(gf=>gf.GenreId==item.Id))
-                {
-                <input type="checkbox" name=genres value="@item.Id" checked>@item.GenreName<br />                    
-                }
-                else
-                {
-                <input type="checkbox" name=genres value="@item.Id">@item.GenreName<br />                    
-                }
-
+                   if(Model.Genres.Any(gf=>gf.GenreId==item.Id))
+                   {
+                   <input type="checkbox" name=genres value="@item.Id" checked>@item.GenreName<br />                    
+                   }
+                   else
+                   {
+                   <input type="checkbox" name=genres value="@item.Id">@item.GenreName<br />                    
+                   }
                }
             </div>
             <div class="form-group">
@@ -68,18 +67,17 @@
                 <span asp-validation-for="DirectorId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Actors" class="control-label"></label>
-                @foreach(SmartReservationCinema.FilmContext.Actor item in ViewBag.Actors)
+               <label asp-for="Actors" class="control-label"></label>
+               @foreach(SmartReservationCinema.FilmContext.Actor item in ViewBag.Actors)
                {
-                if(Model.Actors.Any(gf=>gf.ActorId==item.Id))
-                {
-                <input type="checkbox" name=actors value="@item.Id" checked>@item.Name<br />                    
-                }
-                else
-                {
-                <input type="checkbox" name=actors value="@item.Id">@item.Name<br />                    
-                }
-
+                    if(Model.Actors.Any(gf=>gf.ActorId==item.Id))
+                    {
+                    <input type="checkbox" name=actors value="@item.Id" checked>@item.Name<br />                    
+                    }
+                    else
+                    {
+                    <input type="checkbox" name=actors value="@item.Id">@item.Name<br />                    
+                    }
                }
             </div>
             <div class="form-group">

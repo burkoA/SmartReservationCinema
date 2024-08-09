@@ -40,7 +40,7 @@ namespace SmartReservationCinema.Services
             Stream stream = response.GetResponseStream();
             StreamReader reader = new StreamReader(stream);
             string result = reader.ReadToEnd();
-            //str=str.Replace("\0xA", "\n");            
+          
             reader.Close();
             stream.Close();
             response.Close();
@@ -63,7 +63,6 @@ namespace SmartReservationCinema.Services
         {
             public DistanceValue distance { get; set; }
             public DistanceValue duration { get; set; }
-            //public DistanceValue duration_in_traffic { get; set; }
             public string status { get; set; }
         }
 

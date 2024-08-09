@@ -14,35 +14,35 @@
 <body>
 
 <header>
-  <div class="container">
-    <div class="header-left">
-      <h1>Cinema</h1>
-    </div>
-    <div class="header-middle">
-      <nav>
-        <ul>
-          <li><a asp-controller="Film" asp-action="Index">Movies</a></li>
-          <li><a asp-controller="Cinema" asp-action="Index">Cinema</a></li>
-        @if (Context.User.Identity.IsAuthenticated)
-        {
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">
-                                    <span class="icon">👤</span>
-                                    <span class="text">User profile</span>
-                        </a>
-                        <ul class="dropdown-menu-profile">
-                            <li><a asp-controller="Account" asp-action="Profile">Profile</a></li>
-                            <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
-                        </ul>
-                    </li>
-        }
-        else{
-        <li><a asp-controller="Account" asp-action="Login">Login</a></li>
-        }
-        </ul>
-      </nav>
-    </div>
-    @if (Context.User.IsInRole("admin") || Context.User.IsInRole("manager"))
+    <div class="container">
+        <div class="header-left">
+            <h1>Cinema</h1>
+        </div>
+        <div class="header-middle">
+            <nav>
+                <ul>
+                    <li><a asp-controller="Film" asp-action="Index">Movies</a></li>
+                    <li><a asp-controller="Cinema" asp-action="Index">Cinema</a></li>
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle">
+                                                <span class="icon">👤</span>
+                                                <span class="text">User profile</span>
+                                    </a>
+                                    <ul class="dropdown-menu-profile">
+                                        <li><a asp-controller="Account" asp-action="Profile">Profile</a></li>
+                                        <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                    </ul>
+                                </li>
+                    }
+                    else{
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                    }
+                </ul>
+            </nav>
+        </div>
+        @if (Context.User.IsInRole("admin") || Context.User.IsInRole("manager"))
         {
             <div class="admin-panel-block">
                 <ul>
@@ -57,32 +57,34 @@
                             <li><a asp-controller="Language" asp-action="Index">Language</a></li>
                             <li><a asp-controller="Subtitle" asp-action="Index">Subtitle</a></li>
                             @if (Context.User.IsInRole("admin"))
-                                {
-                                  <li><a asp-controller="Account" asp-action="AccountList">Users</a></li>  
-                                }
+                            {
+                                <li><a asp-controller="Account" asp-action="AccountList">Users</a></li>  
+                            }
                         </ul>
                     </li>
                 </ul>
             </div>
         }
-    <div class="header-right">
-      <form class="search-form" method="get">
-        <input type="text" name="search" placeholder="Search...">
-        <button type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</header>
-  <main role="main" class="pb-3">
-    @RenderBody()
-  </main>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - SmartReservationCinema - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="header-right">
+            <form class="search-form" method="get">
+                <input type="text" name="search" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
         </div>
-    </footer>
-    <script>
+    </div>
+</header>
+
+<main role="main" class="pb-3">
+    @RenderBody()
+</main>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2023 - SmartReservationCinema - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+</footer>
+
+<script>
 $document.addEventListener('DOMContentLoaded', function() {
   var dropdownToggle = document.querySelectorAll('.dropdown-toggle');
   var dropdownMenus = document.querySelectorAll('.dropdown-menu');

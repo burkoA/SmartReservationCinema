@@ -3,23 +3,23 @@
 @{
 }
 
-        <div class="main-container">
-          <div class="row">
-            <div class="col-md-4 col-sm-2 col-lg-2">
-              <div class="genre">
+<div class="main-container">
+    <div class="row">
+        <div class="col-md-4 col-sm-2 col-lg-2">
+            <div class="genre">
                 <h2>Genres</h2>
                 <ul>
-                  <li><a asp-controller="Film" asp-action="Index" asp-route-id="">All Genres</a></li>
-                  @foreach(SmartReservationCinema.FilmContext.Genre genre in ViewBag.GenresList)
-                  {
-                    <li><a asp-controller="Film" asp-action="Index" asp-route-id="@genre.Id">@genre.GenreName</a></li>
-                  }
+                    <li><a asp-controller="Film" asp-action="Index" asp-route-id="">All Genres</a></li>
+                    @foreach(SmartReservationCinema.FilmContext.Genre genre in ViewBag.GenresList)
+                    {
+                        <li><a asp-controller="Film" asp-action="Index" asp-route-id="@genre.Id">@genre.GenreName</a></li>
+                    }
                 </ul>
-              </div>
             </div>
+        </div>
       
-            <div class="col-md-8 col-lg-10 col-sm-10">
-              <div class="col-md-12 cinema-list">
+        <div class="col-md-8 col-lg-10 col-sm-10">
+            <div class="col-md-12 cinema-list">
                 <h2>Movie List</h2>
                 @if (Context.User.IsInRole("admin") || Context.User.IsInRole("manager"))
                 {
@@ -28,55 +28,55 @@
                     </div>
                 }
             </div>
-              @foreach(SmartReservationCinema.FilmContext.Film item in Model )
-              {
-                  
-              
-              <div class="movie-info row">
-                <div class="col-md-4 col-sm-8">
-                    <a asp-action="Details" asp-route-id="@item.Id">
-                  <img src="/img/filmsImage/@item.Image" alt="Movie Poster" class="img-fluid">
-                  </a>
-                </div>
+            @foreach(SmartReservationCinema.FilmContext.Film item in Model )
+            {
+                <div class="movie-info row">
+                    <div class="col-md-4 col-sm-8">
+                        <a asp-action="Details" asp-route-id="@item.Id">
+                            <img src="/img/filmsImage/@item.Image" alt="Movie Poster" class="img-fluid">
+                        </a>
+                    </div>
       
-                <div class="col-md-8 col-sm-4">
-                   <div class="movie-title" style="display: flex; justify-content: space-between;">
-                        <a asp-action="Details" asp-route-id="@item.Id"><h1 class="movie-name">@item.FilmName</h1></a>
-                        @if(ViewBag.CurrentUser!=null){
-                            <label for="favorite-checkbox-@item.Id" style="cursor: pointer; height: 15px;">
-                                    @{
-                                        string check = "";
-                                        string color = "grey";
-                                        if(item.FavouriteFilms.Where(ff=>ff.UserId==ViewBag.CurrentUser.Id).Count()>0){
-                                            check = "checked";
-                                            color = "darkgoldenrod";
-                                        }
+                    <div class="col-md-8 col-sm-4">
+                        <div class="movie-title" style="display: flex; justify-content: space-between;">
+                            <a asp-action="Details" asp-route-id="@item.Id"><h1 class="movie-name">@item.FilmName</h1></a>
+                            @if(ViewBag.CurrentUser!=null)
+                            {
+                                <label for="favorite-checkbox-@item.Id" style="cursor: pointer; height: 15px;">
+                                @{
+                                    string check = "";
+                                    string color = "grey";
+                                    if(item.FavouriteFilms.Where(ff=>ff.UserId==ViewBag.CurrentUser.Id).Count()>0)
+                                    {
+                                        check = "checked";
+                                        color = "darkgoldenrod";
                                     }
-                            <input type="checkbox" value="@item.Id" @check id="favorite-checkbox-@item.Id" class="favorite-checkbox" style="display: none;">
-                            <span style="color: @color; font-size: 2em">&#x2605;</span>
-                            </label>
-                        }
-                  </div>
+                                }
+                                <input type="checkbox" value="@item.Id" @check id="favorite-checkbox-@item.Id" class="favorite-checkbox" style="display: none;">
+                                <span style="color: @color; font-size: 2em">&#x2605;</span>
+                                </label>
+                            }
+                        </div>
       
-                  <div class="genre-info">
-                    <h2>Genre:</h2>
-                    <p>
-                        @foreach( SmartReservationCinema.FilmContext.Genre_Film item2 in item.Genres)
-                        {
-                            <span>@item2.Genre.GenreName</span>            
-                        }
-                    </p>
-                   </div>
+                        <div class="genre-info">
+                            <h2>Genre:</h2>
+                            <p>
+                                @foreach( SmartReservationCinema.FilmContext.Genre_Film item2 in item.Genres)
+                                {
+                                    <span>@item2.Genre.GenreName</span>            
+                                }
+                            </p>
+                        </div>
 
-                  <div class="movie-description">
-                    <h2>Description of the movie:</h2>
-                    <p class="description-text">@item.Description</p>
-                  </div>
+                        <div class="movie-description">
+                            <h2>Description of the movie:</h2>
+                            <p class="description-text">@item.Description</p>
+                        </div>
       
-                  <div class="rating">
-                    <h2>Rating:</h2>                            
-                        <p>@((item.Marks.Count()>0? item.Marks?.Average(m=>m.Mark):item.Rating)?.ToString("F1"))/5</p>
-                  </div>
+                        <div class="rating">
+                            <h2>Rating:</h2>                            
+                            <p>@((item.Marks.Count()>0? item.Marks?.Average(m=>m.Mark):item.Rating)?.ToString("F1"))/5</p>
+                        </div>
                         @if (Context.User.IsInRole("admin") || Context.User.IsInRole("manager"))
                         {
                             <div class="actionButton">
@@ -85,27 +85,27 @@
                             </div>
                         }
                     </div>
-              </div>   
+                </div>   
               
-              }
+            }
 
-            </div>
-            </div>
-            <div class="pagination-container">
-                <div class="pagination-wrapper">
-                    <div class="pagesText">Pages&nbsp;:&nbsp;
-                        <ul class="pagination">
-                            @for (int i = 0; i < ViewBag.pageCnt; i++)
-                            {
-                                <li class="page-item">
-                                    <a class="page-link" href="/Film/Index/@ViewBag.curGenge?curPage=@i@(string.IsNullOrEmpty(ViewBag.search)?"":"&seach="+ViewBag.search)">@(i+1)</a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
+        </div>
+    </div>
+    <div class="pagination-container">
+        <div class="pagination-wrapper">
+            <div class="pagesText">Pages&nbsp;:&nbsp;
+                <ul class="pagination">
+                    @for (int i = 0; i < ViewBag.pageCnt; i++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="/Film/Index/@ViewBag.curGenge?curPage=@i@(string.IsNullOrEmpty(ViewBag.search)?"":"&seach="+ViewBag.search)">@(i+1)</a>
+                        </li>
+                    }
+                </ul>
             </div>
         </div>
+    </div>
+</div>
 <script>
     const heartIcon = document.querySelector('label span');
     async function checkBoxChanged() {

@@ -3,20 +3,20 @@
 @{
 }
 
-    <div class="detailsMovie main-container">
-        <div class="cinema-details">
-          <img class="cinema-image" src="/img/cinemaImage/@Model.Image" alt="Cinema Image">
-          <div class="cinema-info">
+<div class="detailsMovie main-container">
+    <div class="cinema-details">
+        <img class="cinema-image" src="/img/cinemaImage/@Model.Image" alt="Cinema Image">
+        <div class="cinema-info">
             <h1>@Model.CinemaName</h1>
             <p>Localisation: @Model.Localisation</p>
             <p>Town: @Model.Town.TownName</p>
             <p>Cinema Rating: @Model.CinemaRating</p>
             <small style="font-size: 10px; color: gray; margin-left: 10px;">Rating taken from google maps</small>
-          </div>
         </div>
-        <div class="cinema-timetable">
-          <div class="sessionLine">
-              <div class="session-title">
+    </div>
+    <div class="cinema-timetable">
+        <div class="sessionLine">
+            <div class="session-title">
                 <h1>Active Session</h1>
                 @if (Context.User.IsInRole("admin") || Context.User.IsInRole("manager"))
                 {
@@ -24,14 +24,14 @@
                         <a class="create-session" asp-controller="Session" asp-action="Create" asp-route-id="@Model.Id" style="color: black;">Create new session</a>
                     </div>
                 }
-              </div>
+            </div>
             <form method="get" class="filter-form">
-            <label style="font-size: 20px;height: 25px">Choose date</label>
-            <input type="date" name="filterDate" value="@ViewBag.filterDate.ToString("yyyy-MM-dd")">
-            <button style="height: 38px" type="submit">Submit</button>
+                <label style="font-size: 20px;height: 25px">Choose date</label>
+                <input type="date" name="filterDate" value="@ViewBag.filterDate.ToString("yyyy-MM-dd")">
+                <button style="height: 38px" type="submit">Submit</button>
             </form>
-          </div>
-          <table class="styled-table">
+        </div>
+        <table class="styled-table">
             <tr>
               <th>Time</th>
               <th>Duration</th>
@@ -83,6 +83,6 @@
               </td>
             </tr>
             }
-          </table>
-        </div>
+        </table>
     </div>
+</div>

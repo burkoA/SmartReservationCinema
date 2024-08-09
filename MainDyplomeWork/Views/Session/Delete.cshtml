@@ -55,7 +55,6 @@
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="CinemaId" />
         <input type="submit" value="Delete" class="btn btn-danger" />
-        <!--Не працює переаредсація-->
         <a asp-controller="Cinema" asp-action="Details" asp-route-id="@Model.CinemaId">Back to List</a>
     </form>
 </div>
