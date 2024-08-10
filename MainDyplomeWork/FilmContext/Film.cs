@@ -28,15 +28,16 @@ namespace SmartReservationCinema.FilmContext
         public DateTime Realese { get; set; }
         [Range(1,5)]
         public double Rating { get; set; }
-        public IEnumerable<Genre_Film> Genres { get; set; }=new List<Genre_Film>();
         [Display(Name = "Director Name")]
         public int DirectorId { get; set; }
         [ForeignKey("DirectorId")]
         public Director Director { get; set; }
+        [Required]
         public IEnumerable<Film_Actor> Actors { get; set; } = new List<Film_Actor>();
         public IEnumerable<Subtitle> Subtitles { get; set; } = new List<Subtitle>();
         public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
         public IEnumerable<FilmMark> Marks { get; set; } = new List<FilmMark>();
         public IEnumerable<FavouriteFilm> FavouriteFilms { get; set; } = new List<FavouriteFilm>();
+        public IEnumerable<Genre_Film> Genres { get; set; } = new List<Genre_Film>();
     }
 }

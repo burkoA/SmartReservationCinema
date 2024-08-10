@@ -7,6 +7,7 @@ namespace SmartReservationCinema.Models
         [Required]
         public string OldPassword { get; set; }
         [Required]
+        [MinLength(6)]
         public string NewPassword { get; set; }
         [Required]
         [Compare("NewPassword", ErrorMessage = "Passwords are different!")]

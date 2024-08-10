@@ -30,9 +30,13 @@
         <span asp-validation-for="City" class="text-danger"></span>
 
         <label asp-for="Address"></label>
-        <input type="text" asp-for="City">
+        <input type="text" asp-for="Address">
         <span asp-validation-for="Address" class="text-danger"></span>
 
+        <label asp-for="Age"></label>
+        <input type="text" asp-for="Age">
+        <span asp-validation-for="Age" class="text-danger"></span>
+        <br/>
         <div class="regst">
             <button type="submit">Register</button>
             <p class="leftSight">Already have an account? <a asp-action="Login">Login</a></p> 

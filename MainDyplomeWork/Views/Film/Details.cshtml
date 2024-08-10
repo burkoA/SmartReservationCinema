@@ -17,7 +17,7 @@
                     <span>@film_actor.Actor.Name, </span>  
                 }
             </p>
-            <p class="markedPlaceInline"><strong>Average Rating:</strong> @ViewBag.Rate
+            <p class="markedPlaceInline"><strong>Average Rating:</strong> @ViewBag.Rate.ToString("0.0")
                 @if(Context.User.Identity.IsAuthenticated)
                 {
                     <iframe src="/FilmMarks/Create?filmId=@Model.Id" width="100%" height="65" style="border:none;"></iframe>

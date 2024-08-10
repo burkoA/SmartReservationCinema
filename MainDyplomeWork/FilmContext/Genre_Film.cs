@@ -7,7 +7,9 @@ namespace SmartReservationCinema.FilmContext
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public int FilmId { get; set; }
+        [Required]
         public int GenreId { get; set; }
         [ForeignKey("FilmId")]
         public Film Film { get; set; }

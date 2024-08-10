@@ -69,12 +69,14 @@ namespace SmartReservationCinema.Controllers
             return search.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         }
 
-        [HttpGet]
         public ActionResult Details(int id, int townIdFilter = 0, DateTime? dateFilter = null, [FromForm] CommentModel? comment = null)
         {
-            if (HttpContext.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase) && ModelState.IsValid)
+            if (HttpContext.Request.Method.ToUpper() == "POST")
             {
-                CommentController.AddComment(comment, _db, HttpContext);
+                if (ModelState.IsValid)
+                {
+                    CommentController.AddComment(comment, _db, HttpContext);
+                }
             }
             else
             {
@@ -168,7 +170,7 @@ namespace SmartReservationCinema.Controllers
         {
             ViewBag.Genres = _db.Genres.OrderBy(g => g.GenreName).ToList();
             ViewBag.Actors = _db.Actors.OrderBy(a => a.Name).ToList();
-            ViewBag.Directors = new SelectList(_db.Director.OrderBy(d => d.Name), "Id_Director", "Name_Director");
+            ViewBag.Directors = new SelectList(_db.Director.OrderBy(d => d.Name), "Id", "Name");
         }
 
         [HttpPost]

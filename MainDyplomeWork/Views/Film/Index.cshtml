@@ -93,12 +93,16 @@
     </div>
     <div class="pagination-container">
         <div class="pagination-wrapper">
-            <div class="pagesText">Pages&nbsp;:&nbsp;
+            <div class="pagesText">
+                Pages&nbsp;:&nbsp;
                 <ul class="pagination">
-                    @for (int i = 0; i < ViewBag.pageCnt; i++)
+                    @for (int i = 0; i < ViewBag.PageCount; i++)
                     {
-                        <li class="page-item">
-                            <a class="page-link" href="/Film/Index/@ViewBag.curGenge?curPage=@i@(string.IsNullOrEmpty(ViewBag.search)?"":"&seach="+ViewBag.search)">@(i+1)</a>
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link"
+                               href="/Film/Index?id=@ViewBag.CurrentGenre&curPage=@i@(string.IsNullOrEmpty(ViewBag.Search) ? "" : "&search=" + ViewBag.Search)">
+                                @(i + 1)
+                            </a>
                         </li>
                     }
                 </ul>

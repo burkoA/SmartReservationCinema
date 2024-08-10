@@ -117,7 +117,7 @@ namespace SmartReservationCinema.Controllers
                 }
                 catch (Exception)
                 {
-                    ModelState.AddModelError(string.Empty, "Unable to register the user.");
+                    ModelState.AddModelError(string.Empty, "Unable to register the user. May be this mail already registred");
                 }
             }
             return View(model);

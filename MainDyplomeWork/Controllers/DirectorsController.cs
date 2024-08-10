@@ -75,7 +75,7 @@ namespace SmartReservationCinema.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin,manager")]
-        public async Task<IActionResult> Create([Bind("Id_Director,Name_Director,Birth_Place,Work_Experience,Movie_Number")] Director director)
+        public async Task<IActionResult> Create([Bind("Id,Name,BirthPlace,WorkExperience,MovieNumber")] Director director)
         {
             if (ModelState.IsValid)
             {
@@ -108,7 +108,7 @@ namespace SmartReservationCinema.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin,manager")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id_Director,Name_Director,Birth_Place,Work_Experience,Movie_Number")] Director director)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,BirthPlace,WorkExperience,MovieNumber")] Director director)
         {
             if (id != director.Id)
             {

@@ -55,6 +55,7 @@ namespace SmartReservationCinema.FilmContext
             LastName = model.LastName;
             City = model.City;
             Address = model.Address;
+            Age = model.Age;
             Role = UserRole;
             RegisterDate = DateTime.Now;
         }

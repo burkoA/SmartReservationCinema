@@ -195,9 +195,14 @@ namespace SmartReservationCinema.Controllers
 
         [HttpGet]
         [Authorize(Roles = "admin,manager")]
-        public ActionResult CreateSector(int hallId)
+        public IActionResult CreateSector([FromRoute(Name = "id")] int hallId)
         {
-            return View(new HallSector() { HallId = hallId });
+            var hallSector = new HallSector
+            {
+                HallId = hallId
+            };
+
+            return View(hallSector);
         }
 
         [HttpPost]
@@ -205,11 +210,35 @@ namespace SmartReservationCinema.Controllers
         [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> CreateSector([FromForm] HallSector hallSector)
         {
+            if (hallSector.HallId == 0)
+            {
+                ModelState.AddModelError("", "Hall ID is not provided.");
+            }
+            else
+            {
+                var hall = await _context.Halls.FindAsync(hallSector.HallId);
+                if (hall == null)
+                {
+                    ModelState.AddModelError("", "The Hall does not exist.");
+                }
+                else
+                {
+                    hallSector.Hall = hall;
+                }
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(hallSector);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Details), new { id = hallSector.HallId });
+                try
+                {
+                    _context.Add(hallSector);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details), new { id = hallSector.HallId });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Error saving data: {ex.Message}");
+                }
             }
 
             return View(hallSector);
