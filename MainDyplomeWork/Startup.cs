@@ -25,7 +25,6 @@ namespace SmartReservationCinema
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureApplicationCookie(options =>
@@ -46,19 +45,6 @@ namespace SmartReservationCinema
                     });
             services.AddAuthentication();
             services.AddSingleton<MailSender>();
-            //            services.AddAuthentication(o =>
-            //            {
-            //                // This forces challenge results to be handled by Google OpenID Handler, so there's no
-            //                // need to add an AccountController that emits challenges for Login.
-            //                //o.DefaultChallengeScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
-            //                // This forces forbid results to be handled by Google OpenID Handler, which checks if
-            //                // extra scopes are required and does automatic incremental auth.
-            //                //o.DefaultForbidScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
-            //                // Default scheme that will handle everything else.
-            //                // Once a user is authenticated, the OAuth2 token info is stored in cookies.
-            //                o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //            })
-            ////            .AddCookie()
 
             services.AddAuthentication(options =>
             {
@@ -66,16 +52,13 @@ namespace SmartReservationCinema
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
             })
-        //.AddCookie()
         .AddGoogleOpenIdConnect(options =>
             {
-                options.ClientId = "182804071684-hj1e18ooihigcis8177n41klt0jdnf55.apps.googleusercontent.com";
-                options.ClientSecret = "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";
+                options.ClientId = "";
+                options.ClientSecret = "";
             });
         }
         
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (true || env.IsDevelopment())
@@ -85,7 +68,6 @@ namespace SmartReservationCinema
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();

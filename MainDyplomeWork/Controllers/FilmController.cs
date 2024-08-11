@@ -137,7 +137,7 @@ namespace SmartReservationCinema.Controllers
                 if (user != null)
                 {
                     string userAddress = user.Address + " " + user.City;
-                    DistanceFinder distanceFinder = new DistanceFinder("AIzaSyBr1VMywYUjUG0zXgpBz0cIHCnBQKRphbQ");
+                    DistanceFinder distanceFinder = new DistanceFinder("");
                     int[] distances = distanceFinder.GetDistance(userAddress, cinemaAddress.ToArray());
                     IList<CinemaDistanceModel> result = new List<CinemaDistanceModel>();
 
