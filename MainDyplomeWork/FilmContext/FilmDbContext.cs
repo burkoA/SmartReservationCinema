@@ -8,7 +8,7 @@ namespace SmartReservationCinema.FilmContext
     {
         public FilmDbContext()
         {
-            // Database.EnsureCreated();
+             Database.EnsureCreated();
         }
         public DbSet<Film> Films { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -192,7 +192,7 @@ namespace SmartReservationCinema.FilmContext
                 .HasOne(tp => tp.Session)
                 .WithMany(s => s.TicketPrices)
                 .HasForeignKey(tp => tp.SessionId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(builder);
         }
