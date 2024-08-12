@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartReservationCinema.Entity;
+using System.Reflection.Emit;
 
 namespace SmartReservationCinema.FilmContext
 {
@@ -28,6 +29,7 @@ namespace SmartReservationCinema.FilmContext
         public DbSet<HallSector> HallSectors { get; set; }
         public DbSet<TicketPrice> TicketPrices { get; set; }
         public DbSet<FavouriteFilm> FavouriteFilms { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
             dbContextOptionsBuilder.UseSqlServer("Data Source=MSI\\SQLEXPRESS;Initial Catalog=FilmsDB;Integrated Security=True;Trust Server Certificate=True");
@@ -35,34 +37,6 @@ namespace SmartReservationCinema.FilmContext
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-            builder.Entity<User>().HasData(new User[]
-                {
-                    new User()
-                    {
-                        Id = 1,
-                        Email = "admin@gmail.com",
-                        Password = "12345",
-                        Role = User.AdminRole,
-                        FirstName = "Arsen"
-                    },
-                    new User()
-                    {
-                        Id = 2,
-                        Email = "manager@gmail.com",
-                        Password = "123",
-                        Role = User.ManagerRole,
-                        FirstName = "Andrzej"
-                    },
-                    new User()
-                    {
-                        Id = 3,
-                        Email = "user@gmail.com",
-                        Password = "321",
-                        Role = User.UserRole,
-                        FirstName = "Kuba"
-                    }
-                });
             builder.Entity<Genre>().HasData(new Genre[]
             {
                 new Genre()
@@ -213,6 +187,14 @@ namespace SmartReservationCinema.FilmContext
                     Region = "Podlaskie Voivodeship"
                 }
             );
+
+            builder.Entity<TicketPrice>()
+                .HasOne(tp => tp.Session)
+                .WithMany(s => s.TicketPrices)
+                .HasForeignKey(tp => tp.SessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(builder);
         }
     }
 }
