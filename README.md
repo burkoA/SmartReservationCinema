@@ -12,7 +12,6 @@
   <li>Change database connection string in folder <strong>FilmContext</strong> in class <strong>FilmDbContext.cs</strong> in 33 line</li>
   <li>Change API for Google Maps in folder <strong>Controller</strong> in class <strong>FilmController</strong> in method <strong>SortByDistance</strong>.</li>
   <li>Change credentials for Google Maps in class <strong> Startup.cs</strong> in line 72 and 73: <strong>ClientId</strong> and <strong>ClientSecret</strong>.</li>
-  <li>After creating database in <strong>Package Manager Console</strong> write <strong>update-database</strong> for migration and change database to correct view.</li> 
 </ul>
 
 <h3>Example of working</h3>
