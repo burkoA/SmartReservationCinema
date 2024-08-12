@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SmartReservationCinema.FilmContext;
 
 namespace SmartReservationCinema.FilmContext
 {
@@ -7,7 +6,7 @@ namespace SmartReservationCinema.FilmContext
     {
         public FilmDbContext()
         {
-           // Database.EnsureCreated();
+            // Database.EnsureCreated();
         }
         public DbSet<Film> Films { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -23,7 +22,7 @@ namespace SmartReservationCinema.FilmContext
         public DbSet<Language> Languages { get; set; }
         public DbSet<Subtitle> Subtitles { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<FilmMark> FilmMarks { get; set; } 
+        public DbSet<FilmMark> FilmMarks { get; set; }
         public DbSet<FailedLogin> FailedLogins { get; set; }
         public DbSet<HallSector> HallSectors { get; set; }
         public DbSet<TicketPrice> TicketPrices { get; set; }

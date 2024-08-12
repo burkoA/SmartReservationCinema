@@ -1,5 +1,3 @@
-using System;
-
 namespace SmartReservationCinema.Models
 {
     public class ErrorViewModel

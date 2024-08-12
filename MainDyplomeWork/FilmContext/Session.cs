@@ -39,6 +39,6 @@ namespace SmartReservationCinema.FilmContext
         [ForeignKey("SubtitleLanguageId")]
         public Language subtitleLanguage;
 
-		public IEnumerable<TicketPrice> TicketPrices { get; set; } = new List<TicketPrice>();
-	}
+        public IEnumerable<TicketPrice> TicketPrices { get; set; } = new List<TicketPrice>();
+    }
 }

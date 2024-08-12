@@ -18,7 +18,7 @@ namespace SmartReservationCinema.FilmContext
         [Display(Name = "Film Name")]
         public string FilmName { get; set; } = "";
         [Required]
-        [Range(0,500)]
+        [Range(0, 500)]
         [Display(Name = "Duration")]
         public int Time { get; set; }
         [MaxLength(50)]
@@ -26,7 +26,7 @@ namespace SmartReservationCinema.FilmContext
         [Required]
         [DataType(DataType.Date)]
         public DateTime Realese { get; set; }
-        [Range(1,5)]
+        [Range(1, 5)]
         public double Rating { get; set; }
         [Display(Name = "Director Name")]
         public int DirectorId { get; set; }

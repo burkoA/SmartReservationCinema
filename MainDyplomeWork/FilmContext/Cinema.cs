@@ -18,7 +18,7 @@ namespace SmartReservationCinema.FilmContext
         public double LongCoordinate { get; set; }
         public double LatCoordinate { get; set; }
         [Required]
-        [Range(1,5)]
+        [Range(1, 5)]
         [Display(Name = "Cinema Rating")]
         public double CinemaRating { get; set; }
         public string Image { get; set; } = "";

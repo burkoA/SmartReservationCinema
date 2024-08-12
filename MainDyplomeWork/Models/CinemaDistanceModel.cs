@@ -11,7 +11,7 @@ namespace SmartReservationCinema.Models
 
         }
 
-        public CinemaDistanceModel(Cinema cinema,int distance)
+        public CinemaDistanceModel(Cinema cinema, int distance)
         {
             Id = cinema.Id;
             CinemaName = cinema.CinemaName;

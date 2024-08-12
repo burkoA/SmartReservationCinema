@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SmartReservationCinema.FilmContext
 {
-    [Index("Email","Time")]
-    [Index("IPAddress","Time")]
+    [Index("Email", "Time")]
+    [Index("IPAddress", "Time")]
     public class FailedLogin
     {
         [Key]

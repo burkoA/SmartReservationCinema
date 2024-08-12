@@ -16,11 +16,11 @@ namespace SmartReservationCinema.FilmContext
         [Display(Name = "Birth Place")]
         public string BirthPlace { get; set; } = "";
         [Required]
-        [Range(1,100)]
+        [Range(1, 100)]
         [Display(Name = "Work Expretience")]
         public int WorkExperience { get; set; }
         [Required]
-        [Range(1,100)]
+        [Range(1, 100)]
         [Display(Name = "Movie Number")]
         public int MovieNumber { get; set; }
 

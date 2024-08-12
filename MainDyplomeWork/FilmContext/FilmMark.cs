@@ -9,7 +9,7 @@ namespace SmartReservationCinema.FilmContext
         [Key]
         public int Id { get; set; }
         [Required]
-        [Range(1,5)]
+        [Range(1, 5)]
         public int Mark { get; set; }
         public DateTime MarkDate { get; set; } = DateTime.Now;
         [Required]

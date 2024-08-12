@@ -124,6 +124,7 @@ namespace SmartReservationCinema.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin,manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

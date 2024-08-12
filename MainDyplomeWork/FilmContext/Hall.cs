@@ -12,13 +12,13 @@ namespace SmartReservationCinema.FilmContext
         [RegularExpression(@"^[^\d]*$", ErrorMessage = "The field cannot contain numbers.")]
         [Display(Name = "Hall Name")]
         public string HallName { get; set; }
-        [Range(0,500)]
+        [Range(0, 500)]
         [Display(Name = "Seat Number")]
         public int SeatNumber { get; set; }
         [Display(Name = "Cinema Name")]
         public int CinemaId { get; set; }
         [ForeignKey("CinemaId")]
         public Cinema Cinema { get; set; }
-		public IEnumerable<HallSector> HallSectors { get; set; } = new List<HallSector>();
-	}
+        public IEnumerable<HallSector> HallSectors { get; set; } = new List<HallSector>();
+    }
 }

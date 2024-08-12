@@ -15,10 +15,10 @@ namespace SmartReservationCinema.Services
             this.APIKey = APIKey;
         }
 
-        public int[] GetDistance(string origin,string[] destinations)
+        public int[] GetDistance(string origin, string[] destinations)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.CreateHttp("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + origin +
-                "&destinations=" + string.Join('|',destinations) + "&key="+APIKey);
+                "&destinations=" + string.Join('|', destinations) + "&key=" + APIKey);
             string json = getResponseStr(request);
             DistanceMatrixModel distanceMatrix = JsonSerializer.Deserialize<DistanceMatrixModel>(json);
             if (distanceMatrix.status != "OK")
@@ -35,12 +35,12 @@ namespace SmartReservationCinema.Services
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             int statusCode = (int)response.StatusCode;
             if (statusCode != 200) throw new Exception($"{statusCode} \"{response.StatusDescription}\"");
-            if (!response.ContentType.ToUpper().Contains("JSON")) throw new Exception($" \"{ response.ContentType }\".");
+            if (!response.ContentType.ToUpper().Contains("JSON")) throw new Exception($" \"{response.ContentType}\".");
 
             Stream stream = response.GetResponseStream();
             StreamReader reader = new StreamReader(stream);
             string result = reader.ReadToEnd();
-          
+
             reader.Close();
             stream.Close();
             response.Close();

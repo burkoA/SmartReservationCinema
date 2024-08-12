@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -8,7 +7,6 @@ using SmartReservationCinema.FilmContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static System.Collections.Specialized.BitVector32;
 
 namespace SmartReservationCinema.Controllers
 {
@@ -32,7 +30,6 @@ namespace SmartReservationCinema.Controllers
             return View(new Session() { CinemaId = cinemaId, Cinema = curCinema });
         }
 
-        // POST: SessionController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin,manager")]

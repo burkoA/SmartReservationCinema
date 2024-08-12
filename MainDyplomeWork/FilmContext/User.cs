@@ -1,14 +1,14 @@
-﻿using SmartReservationCinema.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartReservationCinema.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartReservationCinema.FilmContext
 {
-    [Index("Email",IsUnique = true)]
+    [Index("Email", IsUnique = true)]
     public class User
     {
         [Key]
@@ -70,7 +70,7 @@ namespace SmartReservationCinema.FilmContext
         public static string GetPasswordHash(String password)
         {
             SHA512 sha512 = SHA512.Create();
-            return Convert.ToBase64String(sha512.ComputeHash(Encoding.UTF8.GetBytes(password)));            
+            return Convert.ToBase64String(sha512.ComputeHash(Encoding.UTF8.GetBytes(password)));
         }
 
         public void SetRoleSelections()

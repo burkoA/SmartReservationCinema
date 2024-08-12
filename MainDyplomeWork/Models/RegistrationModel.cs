@@ -15,9 +15,9 @@ namespace SmartReservationCinema.Models
         public string LastName { get; set; } = "";
         public string City { get; set; }
         public string Address { get; set; }
-        [Range(5,120)]
+        [Range(5, 120)]
         public int Age { get; set; }
-        [Compare("Password",ErrorMessage ="Passwords are different!")]
+        [Compare("Password", ErrorMessage = "Passwords are different!")]
         public string PasswordRepeat { get; set; }
     }
 }
