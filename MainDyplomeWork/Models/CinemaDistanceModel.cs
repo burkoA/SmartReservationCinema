@@ -1,4 +1,4 @@
-﻿using SmartReservationCinema.FilmContext;
+﻿using SmartReservationCinema.Entity;
 
 namespace SmartReservationCinema.Models
 {

@@ -49,7 +49,7 @@
             </div>*@
             <div class="form-group">
                <label asp-for="Genres" class="control-label"></label>
-               @foreach(SmartReservationCinema.FilmContext.Genre item in ViewBag.Genres)
+               @foreach(Genre item in ViewBag.Genres)
                {
                    if(Model.Genres.Any(gf=>gf.GenreId==item.Id))
                    {
@@ -68,7 +68,7 @@
             </div>
             <div class="form-group">
                <label asp-for="Actors" class="control-label"></label>
-               @foreach(SmartReservationCinema.FilmContext.Actor item in ViewBag.Actors)
+            @foreach (SmartReservationCinema.Entity.Actor item in ViewBag.Actors)
                {
                     if(Model.Actors.Any(gf=>gf.ActorId==item.Id))
                     {

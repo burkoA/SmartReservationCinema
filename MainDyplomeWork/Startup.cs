@@ -54,8 +54,8 @@ namespace SmartReservationCinema
             })
         .AddGoogleOpenIdConnect(options =>
             {
-                options.ClientId = "";
-                options.ClientSecret = "";
+                options.ClientId = "182804071684-hj1e18ooihigcis8177n41klt0jdnf55.apps.googleusercontent.com";
+                options.ClientSecret = "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";
             });
         }
         

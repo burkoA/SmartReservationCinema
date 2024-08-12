@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using SmartReservationCinema.Entity;
 using SmartReservationCinema.FilmContext;
 using System;
 using System.Collections.Generic;

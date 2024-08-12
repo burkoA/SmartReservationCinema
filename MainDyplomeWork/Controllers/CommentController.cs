@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartReservationCinema.Entity;
 using SmartReservationCinema.FilmContext;
 using SmartReservationCinema.Models;
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmartReservationCinema.Entity;
 using SmartReservationCinema.FilmContext;
 using SmartReservationCinema.Models;
 using SmartReservationCinema.Services;
@@ -47,7 +48,7 @@ namespace SmartReservationCinema.Controllers
 
                 User user = _context.Users.FirstOrDefault((User user) => user.Email == model.Email);
 
-                if (user != null && user.Password == FilmContext.User.GetPasswordHash(model.Password))
+                if (user != null && user.Password == Entity.User.GetPasswordHash(model.Password))
                 {
                     InternalLogin(user, HttpContext);
                     return Redirect("~/Film/Index");
@@ -175,7 +176,7 @@ namespace SmartReservationCinema.Controllers
             if (ModelState.IsValid)
             {
                 User user = GetCurrentUser(_context, HttpContext);
-                string oldPasswordHashed = FilmContext.User.GetPasswordHash(changePassword.OldPassword);
+                string oldPasswordHashed = Entity.User.GetPasswordHash(changePassword.OldPassword);
 
                 if (oldPasswordHashed != user.Password)
                 {
@@ -183,7 +184,7 @@ namespace SmartReservationCinema.Controllers
                     return View(changePassword);
                 }
 
-                user.Password = FilmContext.User.GetPasswordHash(changePassword.NewPassword);
+                user.Password = Entity.User.GetPasswordHash(changePassword.NewPassword);
                 _context.Users.Update(user);
                 _context.SaveChanges();
 
@@ -290,7 +291,7 @@ namespace SmartReservationCinema.Controllers
                 return View(newPassword);
             }
 
-            user.Password = FilmContext.User.GetPasswordHash(newPassword.Password);
+            user.Password = Entity.User.GetPasswordHash(newPassword.Password);
             _context.Users.Update(user);
             _context.SaveChanges();
 

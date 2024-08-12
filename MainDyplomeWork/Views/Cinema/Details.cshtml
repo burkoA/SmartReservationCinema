@@ -1,4 +1,4 @@
-﻿@model SmartReservationCinema.FilmContext.Cinema
+﻿@model Cinema
 
 @{
 }
@@ -43,7 +43,7 @@
               <th>End Date</th>
               <th>Action</th>
             </tr>
-            @foreach(SmartReservationCinema.FilmContext.Session item in ViewBag.Sessions) {
+            @foreach(Session item in ViewBag.Sessions) {
             <tr>
               <td>@item.StartTime.ToShortTimeString()</td>
               <td>@item.Film.Time min</td>

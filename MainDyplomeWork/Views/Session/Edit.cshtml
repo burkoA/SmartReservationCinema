@@ -1,4 +1,4 @@
-﻿@model SmartReservationCinema.FilmContext.Session
+﻿@model             Session
 
 @{
     ViewData["Title"] = "Edit";
@@ -62,7 +62,7 @@
             </div>
         </form>
         <div class="table-fix" id="price" style="width:30%">
-            @await Html.PartialAsync("PriceTable", (IEnumerable<SmartReservationCinema.FilmContext.TicketPrice>)ViewBag.Prices)
+            @await Html.PartialAsync("PriceTable", (IEnumerable<TicketPrice>)ViewBag.Prices)
         </div>
 </div>
 

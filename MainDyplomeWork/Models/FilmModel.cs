@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using SmartReservationCinema.FilmContext;
+using SmartReservationCinema.Entity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

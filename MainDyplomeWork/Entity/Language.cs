@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartReservationCinema.FilmContext
+namespace SmartReservationCinema.Entity
 {
     public class Language
     {

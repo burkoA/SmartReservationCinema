@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartReservationCinema.FilmContext
+namespace SmartReservationCinema.Entity
 {
-    public class Town
+    public class Actor
     {
         [Key]
         public int Id { get; set; }
         [Required]
         [RegularExpression(@"^[^\d]*$", ErrorMessage = "The field cannot contain numbers.")]
-        [Display(Name = "Town Name")]
-        public string TownName { get; set; }
+        [Display(Name = "Actor Name")]
+        public string Name { get; set; } = "";
         [Required]
         [RegularExpression(@"^[^\d]*$", ErrorMessage = "The field cannot contain numbers.")]
-        public string Region { get; set; }
-
-        public List<Cinema> Cinemas { get; set; }
+        [Display(Name = "Nationality")]
+        public string Nationality { get; set; } = "";
+        public List<Film_Actor> Films { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartReservationCinema.FilmContext
+namespace SmartReservationCinema.Entity
 {
     [Index("Email", "Time")]
     [Index("IPAddress", "Time")]

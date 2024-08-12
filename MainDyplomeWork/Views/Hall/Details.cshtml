@@ -1,4 +1,4 @@
-﻿@model SmartReservationCinema.FilmContext.Hall
+﻿@model             Hall
 
 @{
     ViewData["Title"] = "Details";
@@ -40,7 +40,7 @@
             <th>Sector Name</th>
             <th>Action</th>
         </tr>
-        @foreach(SmartReservationCinema.FilmContext.HallSector item in Model.HallSectors)
+        @foreach(HallSector item in Model.HallSectors)
         {
             <tr>
                 <td>@item.SectorName</td>

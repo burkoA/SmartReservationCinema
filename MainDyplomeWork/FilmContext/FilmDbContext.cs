@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SmartReservationCinema.Entity;
 
 namespace SmartReservationCinema.FilmContext
 {

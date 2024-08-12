@@ -1,4 +1,4 @@
-﻿@model SmartReservationCinema.FilmContext.Film
+﻿@model             Film
 
 @{
     ViewData["Title"] = "Details";
@@ -13,7 +13,7 @@
             <h1>@Model.FilmName</h1>
 			<p><strong>Director:</strong> @Model.Director.Name</p>
 			<p><strong>Actors:</strong>
-                @foreach(SmartReservationCinema.FilmContext.Film_Actor film_actor in Model.Actors) {
+                @foreach(Film_Actor film_actor in Model.Actors) {
                     <span>@film_actor.Actor.Name, </span>  
                 }
             </p>
@@ -25,13 +25,13 @@
             </p>
             <p><strong>Duration:</strong> @Model.Time min</p>
             <p><strong>Subtitles:</strong> 
-                @foreach(SmartReservationCinema.FilmContext.Subtitle film_subtitle in Model.Subtitles)
+                @foreach(Subtitle film_subtitle in Model.Subtitles)
                 {
                             <span>@film_subtitle.Language.LanguageName, </span>
                 }    
             </p>
             <p><strong>Genres:</strong> 
-                @foreach(SmartReservationCinema.FilmContext.Genre_Film genre_film in Model.Genres) {
+                @foreach(Genre_Film genre_film in Model.Genres) {
                     <span>@genre_film.Genre.GenreName, </span>  
                 }
             </p>
@@ -51,7 +51,7 @@
                 <label style="font-size: 20px;">Choose town</label><br />
                 <form class="townFormFilter">
                     <select style="height: 35px; width:150px;" name="TownIdFilter" class="form-control">
-                        @foreach(SmartReservationCinema.FilmContext.Town town in ViewBag.Towns)
+                        @foreach(Town town in ViewBag.Towns)
                         {
                             if (town.Id == ViewBag.SelectedTownId)
                             {

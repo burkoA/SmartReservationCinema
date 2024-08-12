@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SmartReservationCinema.FilmContext.Film>
+﻿@model IEnumerable<Film>
 
 @{
 }
@@ -10,7 +10,7 @@
                 <h2>Genres</h2>
                 <ul>
                     <li><a asp-controller="Film" asp-action="Index" asp-route-id="">All Genres</a></li>
-                    @foreach(SmartReservationCinema.FilmContext.Genre genre in ViewBag.GenresList)
+                    @foreach(Genre genre in ViewBag.GenresList)
                     {
                         <li><a asp-controller="Film" asp-action="Index" asp-route-id="@genre.Id">@genre.GenreName</a></li>
                     }
@@ -28,7 +28,7 @@
                     </div>
                 }
             </div>
-            @foreach(SmartReservationCinema.FilmContext.Film item in Model )
+            @foreach(Film item in Model )
             {
                 <div class="movie-info row">
                     <div class="col-md-4 col-sm-8">
@@ -61,7 +61,7 @@
                         <div class="genre-info">
                             <h2>Genre:</h2>
                             <p>
-                                @foreach( SmartReservationCinema.FilmContext.Genre_Film item2 in item.Genres)
+                                @foreach( Genre_Film item2 in item.Genres)
                                 {
                                     <span>@item2.Genre.GenreName</span>            
                                 }

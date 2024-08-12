@@ -1,24 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartReservationCinema.FilmContext
+namespace SmartReservationCinema.Entity
 {
-    public class Comment
+    public class Genre_Film
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        [MinLength(10)]
-        [MaxLength(100)]
-        public string Text { get; set; }
-        [Required]
         public int FilmId { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public int GenreId { get; set; }
         [ForeignKey("FilmId")]
         public Film Film { get; set; }
-        [ForeignKey("UserId")]
-        public User User { get; set; }
+        [ForeignKey("GenreId")]
+        public Genre Genre { get; set; }
 
     }
 }

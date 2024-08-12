@@ -5,6 +5,7 @@ using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartReservationCinema.Entity;
 using SmartReservationCinema.FilmContext;
 using SmartReservationCinema.Models;
 using System.Linq;

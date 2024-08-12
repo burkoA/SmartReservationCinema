@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SmartReservationCinema.FilmContext.Cinema>
+﻿@model IEnumerable<Cinema>
 
 @{
 }
@@ -9,7 +9,7 @@
                 <h2>Towns</h2>
                 <ul>
                   <li><a asp-controller="Cinema" asp-action="Index" asp-route-id="">All Towns</a></li>
-                    @foreach(SmartReservationCinema.FilmContext.Town town in ViewBag.TownsList)
+                    @foreach(Town town in ViewBag.TownsList)
                     {
                         <li><a asp-controller="Cinema" asp-action="Index" asp-route-id="@town.Id">@town.TownName</a></li>    
                     }
@@ -29,7 +29,7 @@
             </div>
 
 
-            @foreach(SmartReservationCinema.FilmContext.Cinema item in Model) 
+            @foreach(Cinema item in Model) 
             { 
                 <div class="movie-info row">
                     <div class="col-md-4 col-sm-8">

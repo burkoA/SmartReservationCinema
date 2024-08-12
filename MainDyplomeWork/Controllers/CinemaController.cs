@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SmartReservationCinema.Entity;
 using SmartReservationCinema.FilmContext;
 using SmartReservationCinema.Models;
 using System;

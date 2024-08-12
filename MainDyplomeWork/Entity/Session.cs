@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartReservationCinema.FilmContext
+namespace SmartReservationCinema.Entity
 {
     public class Session
     {
@@ -19,7 +19,7 @@ namespace SmartReservationCinema.FilmContext
         [Display(Name = "Hall Name")]
         public int? HallId { get; set; }
         [ForeignKey("HallId")]
-        public Hall? Hall { get; set; }
+        public Hall Hall { get; set; }
         [Display(Name = "Film Name")]
         public int FilmId { get; set; }
         [ForeignKey("FilmId")]

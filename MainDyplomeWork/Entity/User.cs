@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SmartReservationCinema.FilmContext
+namespace SmartReservationCinema.Entity
 {
     [Index("Email", IsUnique = true)]
     public class User
@@ -67,7 +67,7 @@ namespace SmartReservationCinema.FilmContext
             Address = profile.Address;
             Age = profile.Age;
         }
-        public static string GetPasswordHash(String password)
+        public static string GetPasswordHash(string password)
         {
             SHA512 sha512 = SHA512.Create();
             return Convert.ToBase64String(sha512.ComputeHash(Encoding.UTF8.GetBytes(password)));
